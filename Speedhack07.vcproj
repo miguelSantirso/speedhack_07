@@ -239,11 +239,35 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
+				RelativePath=".\src\Arbiter.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Body.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Collide.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Easy_Writer.cpp"
 				>
 			</File>
 			<File
+				RelativePath=".\src\Joint.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\main.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\Objeto_Fisico.cpp"
+				>
+			</File>
+			<File
+				RelativePath=".\src\World.cpp"
 				>
 			</File>
 		</Filter>
@@ -253,7 +277,31 @@
 			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}"
 			>
 			<File
+				RelativePath=".\include\Arbiter.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\Body.h"
+				>
+			</File>
+			<File
 				RelativePath=".\include\Easy_Writer.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\Joint.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\MathUtils.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\Objeto_Fisico.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\World.h"
 				>
 			</File>
 		</Filter>
