@@ -1,3 +1,5 @@
+#define FULLSCREEN
+
 #include <allegro.h>
 #include <string>
 
@@ -19,6 +21,10 @@ vector<Body *> bodies;	// Vector de cuerpos físicos (las cajas de colisiones)
 vector<Joint *> joints;	// Vector de enlaces (enlaces entre cuerpos físicos)
 vector<Objeto_Fisico *> Objetos_Fisicos;	// Almacena los punteros a todos los objetos que se rigen por las físicas.
 
+
+// Global Game Variables
+int Seconds_Remaining;
+
 // Resolution
 int Res_Width;
 int Res_Height;
@@ -31,8 +37,15 @@ volatile int logic_count;
 volatile int lps;
 volatile int cycle_count;
 volatile int game_count;
+volatile int miliseconds;
 
 BITMAP * swap_screen;
+
+// counts miliseconds from the beggining
+void ms_counter(void) {
+	miliseconds++;
+}
+END_OF_FUNCTION(ms_counter)
 
 // keeps track of frames each second
 void fps_counter(void) {
@@ -110,11 +123,26 @@ void Aborta_Con_Error(string Error)
 	exit(-1);
 }
 
+
+void Write_Time()
+{
+	int Aux = (Seconds_Remaining*1000 - miliseconds);
+	int Minutes = (Aux/1000)/60;
+	int Seconds = (Aux/1000)%60;
+	int MiliSeconds = Aux%60;
+	
+	Writer->Write_Number(Minutes, makecol(0,0,255), (Res_Width-100*Size_Multiplier), 25*Size_Multiplier, 15*Size_Multiplier);
+	Writer->Write_Number(Seconds, makecol(0,0,255), (Res_Width-70*Size_Multiplier), 25*Size_Multiplier, 15*Size_Multiplier);
+	Writer->Write_Number(MiliSeconds, makecol(0,0,255), (Res_Width-40*Size_Multiplier), 25*Size_Multiplier, 15*Size_Multiplier);
+}
+
 // Cargador de la partida
 void Iniciar_Partida()
 {
 	// INICIALIZAR TODO
 	Writer = new Easy_Writer(swap_screen);
+
+	Seconds_Remaining = 120;
 /*
    // Carga y creación del techo
 	Objeto_Fisico *Techo = new Objeto_Fisico("media\\techo.pcx", FLT_MAX);
@@ -222,7 +250,9 @@ void Render()
 
 	// DIBUJAR TODO
 	Writer->Write_String("THE 2:00:00 MINUTES GAME", makecol(0,0,255), Res_Width/2, Res_Height/2, 30*Size_Multiplier);
-	Writer->Write_Number(50, makecol(0,255,0), Res_Width/2, Res_Height/2+40*Size_Multiplier, 35*Size_Multiplier);
+	Writer->Write_Number(fps, makecol(0,255,0), Res_Width/2, Res_Height/2+40*Size_Multiplier, 35*Size_Multiplier);
+	Writer->Write_Number(miliseconds, makecol(0,255,0), Res_Width/2, Res_Height/2+80*Size_Multiplier, 35*Size_Multiplier);
+	Write_Time();
 
 	// Dibujar objetos físicos
     for(int i = 0; i < (int)Objetos_Fisicos.size(); i ++) {
@@ -267,9 +297,15 @@ void main(int argc, char** argv)
 {
     allegro_init();
 	set_color_depth(16);
+#ifdef FULLSCREEN
 	get_desktop_resolution(& Res_Width, & Res_Height);
+	set_gfx_mode(GFX_AUTODETECT, Res_Width, Res_Height, 0, 0);
+#else
+	Res_Width = 800;
+	Res_Height = 600;
+    set_gfx_mode(GFX_AUTODETECT_WINDOWED, Res_Width, Res_Height, 0, 0);
+#endif
 	Size_Multiplier = Res_Width/640 ;
-    set_gfx_mode(GFX_AUTODETECT, Res_Width, Res_Height, 0, 0);
 	set_window_title("Speedhack 07");
 
 	srand ( time(NULL) );
@@ -290,9 +326,12 @@ void main(int argc, char** argv)
 	LOCK_VARIABLE(logic_count);
 	LOCK_VARIABLE(lps);
 	LOCK_VARIABLE(fps);
+	LOCK_VARIABLE(miliseconds);
 	LOCK_VARIABLE(frame_count);
 	srand(time(NULL));
 
+	LOCK_FUNCTION(ms_counter);
+	install_int(ms_counter, 1);
 	LOCK_FUNCTION(fps_counter);
 	install_int(fps_counter, 1000);
 	fps = 0;
