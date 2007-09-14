@@ -12,6 +12,8 @@ using namespace std;
 extern World world;
 extern vector<Body *> bodies;
 extern void Aborta_Con_Error(string msg);
+extern int X_Camera;
+extern int Y_Camera;
 
 // Constructor por defecto (no se usa)
 Objeto_Fisico::Objeto_Fisico(void): Puntero_Box(NULL), Grafico_Objeto(NULL)
@@ -68,10 +70,10 @@ void Objeto_Fisico::Inicializa(string Ruta_Fichero, float Peso, int Ancho, int A
 void Objeto_Fisico::Dibuja(BITMAP * Pantalla)
 {
 	// Dibujamos en la pantalla el objeto.
-	rotate_sprite(Pantalla,											// Se dibujará en el bitmap indicado
-				Grafico_Objeto,										// bitmap a dibujar
-				Puntero_Box->position.x-Grafico_Objeto->w/2,		// Posición
-				Puntero_Box->position.y-Grafico_Objeto->h/2,
-				itofix((256*Puntero_Box->rotation)/(2*3.141516)));	// Rotación
+	rotate_sprite(Pantalla,												// Se dibujará en el bitmap indicado
+				Grafico_Objeto,											// bitmap a dibujar
+				Puntero_Box->position.x-Grafico_Objeto->w/2-X_Camera,	// Posición
+				Puntero_Box->position.y-Grafico_Objeto->h/2-Y_Camera,
+				itofix((256*Puntero_Box->rotation)/(2*3.141516)));		// Rotación
 }
 

@@ -1,4 +1,4 @@
-#define FULLSCREEN
+//#define FULLSCREEN
 
 #define TITLE_LENGTH int(5000)
 #define TITLETRANSITION_LENGTH int(900)
@@ -27,6 +27,13 @@ vector<Objeto_Fisico *> Objetos_Fisicos;	// Almacena los punteros a todos los ob
 
 // Global Game Variables
 int Seconds_Remaining;
+
+// Camera Coordinates
+int X_Camera;
+int Y_Camera;
+
+// Especial Objects
+
 
 // Resolution
 int Res_Width;
@@ -79,6 +86,9 @@ void DrawBody(BITMAP *p_bmp, Body* body, int px, int py)
 	Mat22 R(body->rotation);
 	Vec2 x = body->position;
 	Vec2 h = 0.5f * body->width;
+
+	x.x -= X_Camera;
+	x.y -= Y_Camera;
 
 	Vec2 v1 = x + R * Vec2(-h.x, -h.y);
 	Vec2 v2 = x + R * Vec2( h.x, -h.y);
@@ -188,13 +198,14 @@ void Iniciar_Partida()
 	Writer = new Easy_Writer(swap_screen);
 
 	Seconds_Remaining = 120;
-/*
-   // Carga y creación del techo
-	Objeto_Fisico *Techo = new Objeto_Fisico("media\\techo.pcx", FLT_MAX);
-	Techo->Puntero_Box->Set(Vec2(1200, 400), FLT_MAX);
+	X_Camera = Y_Camera = 0;
+
+   // Carga y creación del sprite de prueba
+	Objeto_Fisico *Techo = new Objeto_Fisico("media\\nave.pcx", FLT_MAX);
+	Techo->Puntero_Box->Set(Vec2(35, 25), FLT_MAX);
 	Techo->Puntero_Box->friction=500.0f;
-	Techo->Puntero_Box->position.Set(320, 100 - 200);
-	Objetos_Fisicos.push_back(Techo);*/
+	Techo->Puntero_Box->position.Set(Res_Width/2, Res_Height/2);
+	Objetos_Fisicos.push_back(Techo);
 }
 
 void Reiniciar()
@@ -225,11 +236,27 @@ void Reiniciar()
 	Iniciar_Partida();
 }
 
+void Scroll_Controls()
+{
+/*	X_Camera = Cosa_Movil->Puntero_Box->position.x - Res_Width/2;
+	Y_Camera = Cosa_Movil->Puntero_Box->position.y - Res_Height/2;*/
+	if(key[KEY_LEFT])
+		X_Camera -=5;
+	if(key[KEY_RIGHT])
+		X_Camera +=5;
+	if(key[KEY_DOWN])
+		Y_Camera +=5;
+	if(key[KEY_UP])
+		Y_Camera -=5;
+}
+
 // Función que se ocupa de actualizar la lógica y la física del juego
 void Update()
 {
 	// ACTUALIZAR TODA LA LÓGICA
 	world.Step(0.05);	// Actualizar las físicas
+
+	Scroll_Controls();
 }
 
 // draw a rectangle
