@@ -19,6 +19,11 @@ vector<Body *> bodies;	// Vector de cuerpos físicos (las cajas de colisiones)
 vector<Joint *> joints;	// Vector de enlaces (enlaces entre cuerpos físicos)
 vector<Objeto_Fisico *> Objetos_Fisicos;	// Almacena los punteros a todos los objetos que se rigen por las físicas.
 
+// Resolution
+int Res_Width;
+int Res_Height;
+float Size_Multiplier;
+
 // timer stuff
 volatile int frame_count;
 volatile int fps;
@@ -110,13 +115,13 @@ void Iniciar_Partida()
 {
 	// INICIALIZAR TODO
 	Writer = new Easy_Writer(swap_screen);
-
+/*
    // Carga y creación del techo
 	Objeto_Fisico *Techo = new Objeto_Fisico("media\\techo.pcx", FLT_MAX);
-	Techo->Puntero_Box->Set(Vec2(1200, 400), 500.0f);
+	Techo->Puntero_Box->Set(Vec2(1200, 400), FLT_MAX);
 	Techo->Puntero_Box->friction=500.0f;
-	Techo->Puntero_Box->position.Set(320, 20 - 200);
-	Objetos_Fisicos.push_back(Techo);
+	Techo->Puntero_Box->position.Set(320, 100 - 200);
+	Objetos_Fisicos.push_back(Techo);*/
 }
 
 void Reiniciar()
@@ -216,8 +221,8 @@ void Render()
 	clear_to_color(swap_screen, makecol(245,245,255));
 
 	// DIBUJAR TODO
-	Writer->Write_String("THE 2:00:00 MINUTES GAME", makecol(0,0,255), 320, 240, 30);
-	Writer->Write_Number(50, makecol(0,255,0), 320, 300, 35);
+	Writer->Write_String("THE 2:00:00 MINUTES GAME", makecol(0,0,255), Res_Width/2, Res_Height/2, 30*Size_Multiplier);
+	Writer->Write_Number(50, makecol(0,255,0), Res_Width/2, Res_Height/2+40*Size_Multiplier, 35*Size_Multiplier);
 
 	// Dibujar objetos físicos
     for(int i = 0; i < (int)Objetos_Fisicos.size(); i ++) {
@@ -237,7 +242,7 @@ void Render()
 	}
 
     acquire_screen();	// Bloquear la pantalla antes de dibujar
-    blit(swap_screen, screen, 0, 0, 0, 0, 640, 480); // Copiar todo desde swap_screen hasta la pantalla (screen)
+    blit(swap_screen, screen, 0, 0, 0, 0, Res_Width, Res_Height); // Copiar todo desde swap_screen hasta la pantalla (screen)
     release_screen();	// La dejamos libre de nuevo
 }
 
@@ -262,7 +267,9 @@ void main(int argc, char** argv)
 {
     allegro_init();
 	set_color_depth(16);
-    set_gfx_mode(GFX_AUTODETECT_WINDOWED, 640, 480, 0, 0);
+	get_desktop_resolution(& Res_Width, & Res_Height);
+	Size_Multiplier = Res_Width/640 ;
+    set_gfx_mode(GFX_AUTODETECT, Res_Width, Res_Height, 0, 0);
 	set_window_title("Speedhack 07");
 
 	srand ( time(NULL) );
@@ -296,7 +303,7 @@ void main(int argc, char** argv)
 	install_int(cycle_counter, 10);
 	game_count = 0;
 
-	swap_screen = create_bitmap(640, 480);
+	swap_screen = create_bitmap(Res_Width, Res_Height);
 	if (!swap_screen) {
 	    Aborta_Con_Error("failed to create swap screen");
 	}
