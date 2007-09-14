@@ -267,6 +267,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\TheGrandmother.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\World.cpp"
 				>
 			</File>
@@ -298,6 +302,10 @@
 			</File>
 			<File
 				RelativePath=".\include\Objeto_Fisico.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\TheGrandmother.h"
 				>
 			</File>
 			<File

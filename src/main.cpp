@@ -11,6 +11,7 @@
 #include "Body.h"
 #include "Joint.h"
 #include "Objeto_Fisico.h"
+#include "TheGrandmother.h"
 
 using namespace std;
 
@@ -33,7 +34,7 @@ int X_Camera;
 int Y_Camera;
 
 // Especial Objects
-
+TheGrandmother * Grandma;
 
 // Resolution
 int Res_Width;
@@ -200,12 +201,28 @@ void Iniciar_Partida()
 	Seconds_Remaining = 120;
 	X_Camera = Y_Camera = 0;
 
-   // Carga y creación del sprite de prueba
-	Objeto_Fisico *Techo = new Objeto_Fisico("media\\nave.pcx", FLT_MAX);
-	Techo->Puntero_Box->Set(Vec2(35, 25), FLT_MAX);
-	Techo->Puntero_Box->friction=500.0f;
-	Techo->Puntero_Box->position.Set(Res_Width/2, Res_Height/2);
-	Objetos_Fisicos.push_back(Techo);
+   // Load and create the floor
+	Objeto_Fisico *Floor = new Objeto_Fisico("media\\floor.pcx", FLT_MAX);
+	Floor->Puntero_Box->Set(Vec2(2000, 53), FLT_MAX);
+	Floor->Puntero_Box->friction=0.5f;
+	Floor->Puntero_Box->position.Set(Res_Width/2, Res_Height*0.75);
+	Objetos_Fisicos.push_back(Floor);
+
+	Body *C = NULL;
+
+	for(int i=0; i<15; i++)
+	{
+		int X = i*Res_Width/50;
+		int Y = 100;
+		C = new Body();
+		C->Set(Vec2(20*Size_Multiplier, 20*Size_Multiplier), 2.0f);
+		C->friction = rand()%50;
+		C->position.Set(X, Y);
+		bodies.push_back(C);
+		world.bodies.push_back(C);
+	}
+	// Create grandma
+	Grandma = new TheGrandmother();
 }
 
 void Reiniciar()
@@ -238,16 +255,16 @@ void Reiniciar()
 
 void Scroll_Controls()
 {
-/*	X_Camera = Cosa_Movil->Puntero_Box->position.x - Res_Width/2;
-	Y_Camera = Cosa_Movil->Puntero_Box->position.y - Res_Height/2;*/
-	if(key[KEY_LEFT])
+	X_Camera = Grandma->Puntero_Box->position.x - Res_Width/2;
+	Y_Camera = Grandma->Puntero_Box->position.y - Res_Height/2;
+/*	if(key[KEY_LEFT])
 		X_Camera -=5;
 	if(key[KEY_RIGHT])
 		X_Camera +=5;
 	if(key[KEY_DOWN])
 		Y_Camera +=5;
 	if(key[KEY_UP])
-		Y_Camera -=5;
+		Y_Camera -=5;*/
 }
 
 // Función que se ocupa de actualizar la lógica y la física del juego
@@ -255,6 +272,8 @@ void Update()
 {
 	// ACTUALIZAR TODA LA LÓGICA
 	world.Step(0.05);	// Actualizar las físicas
+
+	Grandma->Update();
 
 	Scroll_Controls();
 }
@@ -315,14 +334,17 @@ void drawRectangle(BITMAP *bmp,int x, int y, int w,int h,int color, int style, i
 	}
 }
 
+void Render_Mouse()
+{
+	circle(swap_screen, mouse_x, mouse_y, 5*Size_Multiplier, makecol(80, 80, 80));
+}
+
 // Realiza todas las tareas de dibujo.
 void Render()
 {
 	clear_to_color(swap_screen, makecol(245,245,255));
 
 	// DIBUJAR TODO
-	//Write_Time();
-	Write_Title();
 
 	// Dibujar objetos físicos
     for(int i = 0; i < (int)Objetos_Fisicos.size(); i ++) {
@@ -341,6 +363,12 @@ void Render()
         }
 	}
 
+	Grandma->Render(swap_screen);
+
+	Write_Title();
+
+	Render_Mouse();
+
     acquire_screen();	// Bloquear la pantalla antes de dibujar
     blit(swap_screen, screen, 0, 0, 0, 0, Res_Width, Res_Height); // Copiar todo desde swap_screen hasta la pantalla (screen)
     release_screen();	// La dejamos libre de nuevo
@@ -354,12 +382,8 @@ void Keyboard()
 
 	// Lecturas de teclas con bloqueo
     int kp = readkey() >> 8;
-/*
-	if (kp == KEY_ESC && !Bienvenida) {Bienvenida = true; Muerto = false; Pausa = false; Inicializar(9); }
+
 	if (kp == KEY_TAB) Debug = !Debug;
-	if (kp == KEY_P) Pausa = !Pausa;
-	if (kp == KEY_R) { Inicializar(9); Muerto = false; Pausa = false; Bienvenida = false; }
-	if (kp == KEY_SPACE) Puntero_Agua->Modifica_Amplitud(50);*/
 }
 
 // Función main

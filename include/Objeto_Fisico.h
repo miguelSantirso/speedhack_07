@@ -1,7 +1,7 @@
 #pragma once
 
 // Declaraciones anticipadas
-class Body;
+struct Body;
 struct BITMAP;
 
 #include <string>
