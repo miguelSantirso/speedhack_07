@@ -1,5 +1,8 @@
 #define FULLSCREEN
 
+#define TITLE_LENGTH int(5000)
+#define TITLETRANSITION_LENGTH int(900)
+
 #include <allegro.h>
 #include <string>
 
@@ -130,10 +133,52 @@ void Write_Time()
 	int Minutes = (Aux/1000)/60;
 	int Seconds = (Aux/1000)%60;
 	int MiliSeconds = Aux%60;
-	
-	Writer->Write_Number(Minutes, makecol(0,0,255), (Res_Width-100*Size_Multiplier), 25*Size_Multiplier, 15*Size_Multiplier);
-	Writer->Write_Number(Seconds, makecol(0,0,255), (Res_Width-70*Size_Multiplier), 25*Size_Multiplier, 15*Size_Multiplier);
-	Writer->Write_Number(MiliSeconds, makecol(0,0,255), (Res_Width-40*Size_Multiplier), 25*Size_Multiplier, 15*Size_Multiplier);
+
+	int Size = 15*Size_Multiplier;
+	int X_Left = Res_Width-Size*6*Size_Multiplier;
+	int Y_Top = (Size+Size/2)*Size_Multiplier;
+/*
+	//X_Left -= Res_Width/2 - (Res_Width/2)*(4000 - miliseconds>0 ? (4000 - miliseconds)/1000000 : 0);
+	X_Left -= miliseconds/10;
+	*/
+	Writer->Write_Number(Minutes, makecol(0,0,255), X_Left, Y_Top, Size);
+	Writer->Write_Number(Seconds, makecol(0,0,255), X_Left + 30*Size_Multiplier, Y_Top, Size);
+	Writer->Write_Number(MiliSeconds, makecol(0,0,255), X_Left + 60*Size_Multiplier, Y_Top, Size);
+}
+
+void Write_Title()
+{
+
+	float Percent = 1;
+	if(TITLE_LENGTH - miliseconds <= 0)
+	{
+		int Aux = TITLE_LENGTH + TITLETRANSITION_LENGTH;
+		Percent = (Aux - miliseconds > 0 ? float(TITLETRANSITION_LENGTH - (miliseconds - TITLE_LENGTH))/TITLETRANSITION_LENGTH : 0);
+	/*	if(Percent <= 0)
+			return;*/
+	}
+
+	int Aux = (Seconds_Remaining*1000 - miliseconds);
+	int Minutes = (Aux/1000)/60;
+	int Seconds = (Aux/1000)%60;
+	int MiliSeconds = Aux%60;
+
+	int Size = 13*Size_Multiplier + 28*Percent*Size_Multiplier;
+	int X_Left = Res_Width-Size*13 - 120*Size_Multiplier*Percent;
+	int Y_Top = (Size+Size/2)+170*Size_Multiplier*Percent;
+
+	// Write timer
+	Writer->Write_Number(Minutes, makecol(0,0,255), X_Left, Y_Top, Size);
+	Writer->Write_Number(Seconds, makecol(0,0,255), X_Left + (2*Size), Y_Top, Size);
+	Writer->Write_Number(MiliSeconds, makecol(0,0,255), X_Left + (4*Size), Y_Top, Size);
+
+	// Write "THE"
+	Writer->Write_String("THE", makecol(0,0,255), X_Left-Size*2, Y_Top, Size);
+	// Write "MINUTES"
+	Writer->Write_String("MINUTES", makecol(0,0,255), X_Left+Size*8, Y_Top, Size);
+	// Write "VIDEOGAME"
+	Writer->Write_String("VIDEOGAME", makecol(0,0,255), X_Left+Size*5, Y_Top+1.3*Size, Size*1.3);
+
 }
 
 // Cargador de la partida
@@ -249,10 +294,8 @@ void Render()
 	clear_to_color(swap_screen, makecol(245,245,255));
 
 	// DIBUJAR TODO
-	Writer->Write_String("THE 2:00:00 MINUTES GAME", makecol(0,0,255), Res_Width/2, Res_Height/2, 30*Size_Multiplier);
-	Writer->Write_Number(fps, makecol(0,255,0), Res_Width/2, Res_Height/2+40*Size_Multiplier, 35*Size_Multiplier);
-	Writer->Write_Number(miliseconds, makecol(0,255,0), Res_Width/2, Res_Height/2+80*Size_Multiplier, 35*Size_Multiplier);
-	Write_Time();
+	//Write_Time();
+	Write_Title();
 
 	// Dibujar objetos físicos
     for(int i = 0; i < (int)Objetos_Fisicos.size(); i ++) {

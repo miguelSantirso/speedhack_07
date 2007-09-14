@@ -16,7 +16,7 @@ Easy_Writer::~Easy_Writer(void)
 }
 
 
-void Easy_Writer::Draw_7Segments_Char(char Char, int x, int y, int Size, int Thickness) 
+void Easy_Writer::Draw_7Segments_Char(char Char, int x, int y, int Size, int Thickness, int Colour) 
 {
 	bool Active_Segments[7];
 
@@ -247,17 +247,17 @@ void Easy_Writer::Draw_7Segments_Char(char Char, int x, int y, int Size, int Thi
 		break;
 	}
 
-	int Colour = makecol(50, 50, 200);
-
-    int Y_Middle = y;
+	int Y_Middle = y;
     int Y_Up = Y_Middle;
     int Y_Down = Y_Middle;
     
-    Y_Up -= Size/2;
-    Y_Down += Size/2;
+	int Actual_Size = Size;
+
+    Y_Up -= Actual_Size/2;
+    Y_Down += Actual_Size/2;
     
     int X_Left = x;
-    int X_Right = X_Left + Size/2;
+    int X_Right = X_Left + Actual_Size/2;
 
 	// Segmentos horizontales  
     if(Active_Segments[0])
@@ -300,7 +300,7 @@ void Easy_Writer::Write_String(string Cadena, int Colour, int x, int y, int Size
 	for(int i=0; i<Cadena.size(); i++)
 	{
 		X_Char = x+(Size+Size/2)/2*(j-Cadena.size()/2);
-		Draw_7Segments_Char(Cadena[i], X_Char, y, Size, Size/20);
+		Draw_7Segments_Char(Cadena[i], X_Char, y, Size, Size/20, Colour);
 		j+=(Reverse ? -1 : 1);
 	}
 }
