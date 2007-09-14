@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual C++ Express 2005
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Speedhack07", "Speedhack07.vcproj", "{873E3B66-3CDC-4417-8899-A6073292D83E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+		Static release, static runtime|Win32 = Static release, static runtime|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{873E3B66-3CDC-4417-8899-A6073292D83E}.Debug|Win32.ActiveCfg = Debug|Win32
+		{873E3B66-3CDC-4417-8899-A6073292D83E}.Debug|Win32.Build.0 = Debug|Win32
+		{873E3B66-3CDC-4417-8899-A6073292D83E}.Release|Win32.ActiveCfg = Release|Win32
+		{873E3B66-3CDC-4417-8899-A6073292D83E}.Release|Win32.Build.0 = Release|Win32
+		{873E3B66-3CDC-4417-8899-A6073292D83E}.Static release, static runtime|Win32.ActiveCfg = Static release, static runtime|Win32
+		{873E3B66-3CDC-4417-8899-A6073292D83E}.Static release, static runtime|Win32.Build.0 = Static release, static runtime|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
