@@ -395,6 +395,18 @@ void Try_Finished(int x)
 			Next = Current_Challenge+1;
 		}
 		break;
+	case 2:
+		if(x<Challenge_X-250+50)
+		{
+			Wait_Next = miliseconds;
+			Next = Current_Challenge;
+		}
+		if(x>Target_Left && x<Target_Right)
+		{
+			Wait_Next = miliseconds;
+			Next = Current_Challenge+1;
+		}
+		break;
 	}
 }
 
