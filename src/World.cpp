@@ -150,3 +150,16 @@ void World::Step(float dt)
 		arbiters.clear();
 	}
 }
+
+void World::delete_Body(Body * b)
+{
+	vector<Body *>::iterator i;
+	for(i=bodies.begin(); i!=bodies.end(); i++)
+	{
+		if(*i == b)
+		{
+			bodies.erase(i);
+			break;
+		}
+	}
+}

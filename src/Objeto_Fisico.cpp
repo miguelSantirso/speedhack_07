@@ -26,7 +26,20 @@ Objeto_Fisico::Objeto_Fisico(void): Puntero_Box(NULL), Grafico_Objeto(NULL)
 // Ancho, Alto	Tamaño del gráfico. Si no se indica nada, se le dará el ancho y alto del gráfico.		
 Objeto_Fisico::Objeto_Fisico(string Ruta_Fichero, float Peso, int Ancho, int Alto)
 {
-	Inicializa(Ruta_Fichero, Ancho, Alto);	// Inicializamos según los parámetros indicados
+	Inicializa(Ruta_Fichero, Peso, Ancho, Alto);	// Inicializamos según los parámetros indicados
+	Puntero_Box->mass=Peso;					// Le damos el peso indicado
+}
+
+Objeto_Fisico::Objeto_Fisico(float Peso, int Ancho, int Alto) : Grafico_Objeto(NULL)
+{
+	Width = Ancho;
+	Height = Alto;
+	// Creamos la caja de colisiones asociada
+	Puntero_Box = new Body();
+	Puntero_Box->Set(Vec2(Ancho, Alto), Peso); // Tamaño
+	world.Add(Puntero_Box); // La añadimos al "mundo"
+	bodies.push_back(Puntero_Box); // Y la añadimos al vector que almacena todos los cuerpos
+
 	Puntero_Box->mass=Peso;					// Le damos el peso indicado
 }
 
@@ -60,8 +73,6 @@ void Objeto_Fisico::Inicializa(string Ruta_Fichero, float Peso, int Ancho, int A
 	// Creamos la caja de colisiones asociada
 	Puntero_Box = new Body();
 	Puntero_Box->Set(Vec2(Ancho, Alto), Peso); // Tamaño
-	Puntero_Box->position.Set(320, 240); // Posición
-    Puntero_Box->friction = 0.5; // Fricción del objeto
 	world.Add(Puntero_Box); // La añadimos al "mundo"
 	bodies.push_back(Puntero_Box); // Y la añadimos al vector que almacena todos los cuerpos
 }
@@ -69,11 +80,23 @@ void Objeto_Fisico::Inicializa(string Ruta_Fichero, float Peso, int Ancho, int A
 // Dibuja el objeto en pantalla
 void Objeto_Fisico::Dibuja(BITMAP * Pantalla)
 {
-	// Dibujamos en la pantalla el objeto.
-	rotate_sprite(Pantalla,												// Se dibujará en el bitmap indicado
-				Grafico_Objeto,											// bitmap a dibujar
-				Puntero_Box->position.x-Grafico_Objeto->w/2-X_Camera,	// Posición
-				Puntero_Box->position.y-Grafico_Objeto->h/2-Y_Camera,
-				itofix((256*Puntero_Box->rotation)/(2*3.141516)));		// Rotación
+	if(Grafico_Objeto != NULL)
+	{
+		// Dibujamos en la pantalla el objeto.
+		rotate_sprite(Pantalla,												// Se dibujará en el bitmap indicado
+					Grafico_Objeto,											// bitmap a dibujar
+					Puntero_Box->position.x-Grafico_Objeto->w/2-X_Camera,	// Posición
+					Puntero_Box->position.y-Grafico_Objeto->h/2-Y_Camera,
+					itofix((256*Puntero_Box->rotation)/(2*3.141516)));		// Rotación
+	}
+	else
+	{
+		rectfill(Pantalla, 
+				Puntero_Box->position.x-Width/2-X_Camera, 
+				Puntero_Box->position.y-Height/2-Y_Camera,
+				Puntero_Box->position.x+Width/2-X_Camera, 
+				Puntero_Box->position.y+Height/2-Y_Camera,
+				makecol(50, 50 ,50));
+	}
 }
 

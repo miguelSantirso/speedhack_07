@@ -16,6 +16,7 @@ public:
 	// Constructores
 	Objeto_Fisico(void);
 	Objeto_Fisico(std::string Ruta_Fichero, float Peso=10.0f, int Ancho=0, int Alto=0);
+	Objeto_Fisico(float Peso, int Ancho, int Alto);
 
 	// Destructor
 	~Objeto_Fisico(void);
@@ -28,4 +29,7 @@ public:
 	Body * Puntero_Box; // Puntero a la caja de colisiones asociada.
 protected:
 	BITMAP * Grafico_Objeto; // Puntero al sprite que representa al objeto en pantalla
+	
+	int Width;
+	int Height;
 };

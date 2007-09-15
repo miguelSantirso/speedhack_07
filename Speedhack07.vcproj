@@ -247,6 +247,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Cat_Shooter.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Collide.cpp"
 				>
 			</File>
@@ -286,6 +290,10 @@
 			</File>
 			<File
 				RelativePath=".\include\Body.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\Cat_Shooter.h"
 				>
 			</File>
 			<File

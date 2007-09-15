@@ -12,6 +12,7 @@
 #include "Joint.h"
 #include "Objeto_Fisico.h"
 #include "TheGrandmother.h"
+#include "Cat_Shooter.h"
 
 using namespace std;
 
@@ -28,6 +29,10 @@ vector<Objeto_Fisico *> Objetos_Fisicos;	// Almacena los punteros a todos los ob
 
 // Global Game Variables
 int Seconds_Remaining;
+int Current_Challenge;
+int Challenge_X;
+int Challenge_Y;
+int Next;
 
 // Camera Coordinates
 int X_Camera;
@@ -35,6 +40,7 @@ int Y_Camera;
 
 // Especial Objects
 TheGrandmother * Grandma;
+Cat_Shooter * Teh_Shooter;
 
 // Resolution
 int Res_Width;
@@ -51,6 +57,8 @@ volatile int game_count;
 volatile int miliseconds;
 
 BITMAP * swap_screen;
+
+void Reiniciar(bool First_Time=true);
 
 // counts miliseconds from the beggining
 void ms_counter(void) {
@@ -192,40 +200,79 @@ void Write_Title()
 
 }
 
-// Cargador de la partida
-void Iniciar_Partida()
+void Start_Challenge(int ID_Challenge)
 {
+	// INICIAR RETOS
+	Current_Challenge = ID_Challenge;
+	switch(ID_Challenge)
+	{
+		case 1:
+			X_Camera = Y_Camera = 0;
+			Challenge_X = Res_Width/10;
+			Challenge_Y = Res_Height - Res_Height/3;
+
+			Objeto_Fisico *Floor;
+		    
+		   // Load and create the floor
+			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 50);
+			Floor->Puntero_Box->friction=0.5f;
+			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y);
+			Floor->Puntero_Box->rotation=-0.2;
+			Objetos_Fisicos.push_back(Floor);
+
+			// Load and create the floor
+			Floor = new Objeto_Fisico(FLT_MAX, 400, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
+			Objetos_Fisicos.push_back(Floor);
+
+			// Load and create the platforms
+			Floor = new Objeto_Fisico("media\\grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor->Puntero_Box->friction=0.3f;
+			Floor->Puntero_Box->position.Set(Challenge_X+760, Challenge_Y+90);
+			Objetos_Fisicos.push_back(Floor);
+			Floor = new Objeto_Fisico("media\\iceplatform.pcx",FLT_MAX, 180, 270);
+			Floor->Puntero_Box->friction=0.05f;
+			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150);
+			Objetos_Fisicos.push_back(Floor);
+
+			// Create the cat shooter
+			Teh_Shooter = new Cat_Shooter();
+
+			// Create grandma
+			Grandma = new TheGrandmother();
+			break;
+	}
+}
+void delete_Body(Body* b)
+{
+	world.delete_Body(b);
+	
+	vector<Body *>::iterator i;
+	for(i=bodies.begin(); i!=bodies.end(); i++)
+	{
+		if(*i == b)
+		{
+			bodies.erase(i);
+			break;
+		}
+	}
+}
+
+// Cargador de la partida
+void Iniciar_Partida(int i)
+{
+	Next = -1;
 	// INICIALIZAR TODO
 	Writer = new Easy_Writer(swap_screen);
 
 	Seconds_Remaining = 120;
-	X_Camera = Y_Camera = 0;
 
-   // Load and create the floor
-	Objeto_Fisico *Floor = new Objeto_Fisico("media\\floor.pcx", FLT_MAX);
-	Floor->Puntero_Box->Set(Vec2(2000, 53), FLT_MAX);
-	Floor->Puntero_Box->friction=0.5f;
-	Floor->Puntero_Box->position.Set(Res_Width/2, Res_Height*0.75);
-	Objetos_Fisicos.push_back(Floor);
+	Start_Challenge(i);
 
-	Body *C = NULL;
-
-	for(int i=0; i<15; i++)
-	{
-		int X = i*Res_Width/50;
-		int Y = 100;
-		C = new Body();
-		C->Set(Vec2(20*Size_Multiplier, 20*Size_Multiplier), 2.0f);
-		C->friction = rand()%50;
-		C->position.Set(X, Y);
-		bodies.push_back(C);
-		world.bodies.push_back(C);
-	}
-	// Create grandma
-	Grandma = new TheGrandmother();
 }
 
-void Reiniciar()
+void Reiniciar(bool First_Time)
 {
 	// ELIMINAR TODO
 
@@ -249,22 +296,52 @@ void Reiniciar()
 
 	world.Clear();
 	
+	if(Teh_Shooter != NULL)
+	{
+		delete Teh_Shooter;
+		Teh_Shooter = NULL;
+	}
+
+	if(Grandma != NULL)
+		delete Grandma;
+
 	// Reiniciamos la partida
-	Iniciar_Partida();
+	if(First_Time)
+		Iniciar_Partida(1);
 }
 
 void Scroll_Controls()
 {
-	X_Camera = Grandma->Puntero_Box->position.x - Res_Width/2;
-	Y_Camera = Grandma->Puntero_Box->position.y - Res_Height/2;
-/*	if(key[KEY_LEFT])
-		X_Camera -=5;
+/*	X_Camera = Grandma->Puntero_Box->position.x - Res_Width/2;
+	Y_Camera = Grandma->Puntero_Box->position.y - Res_Height/2;*/
+	if(key[KEY_LEFT])
+		X_Camera -=500;
 	if(key[KEY_RIGHT])
-		X_Camera +=5;
+		X_Camera +=500;
 	if(key[KEY_DOWN])
-		Y_Camera +=5;
+		Y_Camera +=500;
 	if(key[KEY_UP])
-		Y_Camera -=5;*/
+		Y_Camera -=500;
+}
+
+void Try_Finished(int x)
+{
+	switch (Current_Challenge)
+	{
+	case 1:
+		if(x<Challenge_X + 700 || x>Challenge_X + 900)
+			Next = Current_Challenge;
+		break;
+	}
+}
+
+void Update_Challenge()
+{
+	if(Current_Challenge == 1)
+	{
+		if(Teh_Shooter != NULL)
+			Teh_Shooter->Update();
+	}
 }
 
 // Función que se ocupa de actualizar la lógica y la física del juego
@@ -273,9 +350,16 @@ void Update()
 	// ACTUALIZAR TODA LA LÓGICA
 	world.Step(0.05);	// Actualizar las físicas
 
+	Update_Challenge();
 	Grandma->Update();
 
 	Scroll_Controls();
+
+	if(Next != -1)
+	{
+		Reiniciar(false);
+		Iniciar_Partida(Next);
+	}
 }
 
 // draw a rectangle
@@ -339,12 +423,24 @@ void Render_Mouse()
 	circle(swap_screen, mouse_x, mouse_y, 5*Size_Multiplier, makecol(80, 80, 80));
 }
 
+void Render_Challenge()
+{
+	if(Current_Challenge == 1)
+	{
+		if(Teh_Shooter != NULL)
+			Teh_Shooter->Render(swap_screen);
+	}
+}
+
 // Realiza todas las tareas de dibujo.
 void Render()
 {
 	clear_to_color(swap_screen, makecol(245,245,255));
 
 	// DIBUJAR TODO
+
+	line(swap_screen, Challenge_X, Challenge_Y-Res_Height/2, Challenge_X, Challenge_Y+Res_Height/2, makecol(255, 0, 0));
+	line(swap_screen, Challenge_X-Res_Width/2, Challenge_Y, Challenge_X+Res_Width/2, Challenge_Y, makecol(255, 0, 0));
 
 	// Dibujar objetos físicos
     for(int i = 0; i < (int)Objetos_Fisicos.size(); i ++) {
@@ -364,6 +460,7 @@ void Render()
 	}
 
 	Grandma->Render(swap_screen);
+	Render_Challenge();
 
 	Write_Title();
 
@@ -384,6 +481,7 @@ void Keyboard()
     int kp = readkey() >> 8;
 
 	if (kp == KEY_TAB) Debug = !Debug;
+	if (kp == KEY_R) Next = Current_Challenge;
 }
 
 // Función main
@@ -395,8 +493,8 @@ void main(int argc, char** argv)
 	get_desktop_resolution(& Res_Width, & Res_Height);
 	set_gfx_mode(GFX_AUTODETECT, Res_Width, Res_Height, 0, 0);
 #else
-	Res_Width = 800;
-	Res_Height = 600;
+	Res_Width = 1024;
+	Res_Height = 768;
     set_gfx_mode(GFX_AUTODETECT_WINDOWED, Res_Width, Res_Height, 0, 0);
 #endif
 	Size_Multiplier = Res_Width/640 ;

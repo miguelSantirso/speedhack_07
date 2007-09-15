@@ -37,11 +37,14 @@ struct World
 
 	void BroadPhase();
 
+	void delete_Body(Body* b);
+
 	std::vector<Body*> bodies;
 	std::vector<Joint*> joints;
 	std::set<Arbiter> arbiters;
 	Vec2 gravity;
 	int iterations;
+
 };
 
 #endif
