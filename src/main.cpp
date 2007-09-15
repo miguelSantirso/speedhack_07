@@ -1,4 +1,4 @@
-//#define FULLSCREEN
+#define FULLSCREEN
 
 #define TITLE_LENGTH int(5000)
 #define TITLETRANSITION_LENGTH int(900)
@@ -33,13 +33,22 @@ int Current_Challenge;
 int Challenge_X;
 int Challenge_Y;
 int Next;
+int Wait_Next;
+
+int Target_Left;
+int Target_Right;
+int Target_Up;
+int Target_Down;
+
+string Challenge_Name;
+string Challenge_Instructions;
+
 
 // Camera Coordinates
 int X_Camera;
 int Y_Camera;
 
 // Especial Objects
-TheGrandmother * Grandma;
 Cat_Shooter * Teh_Shooter;
 
 // Resolution
@@ -207,6 +216,7 @@ void Start_Challenge(int ID_Challenge)
 	switch(ID_Challenge)
 	{
 		case 1:
+		{
 			X_Camera = Y_Camera = 0;
 			Challenge_X = Res_Width/10;
 			Challenge_Y = Res_Height - Res_Height/3;
@@ -236,12 +246,58 @@ void Start_Challenge(int ID_Challenge)
 			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150);
 			Objetos_Fisicos.push_back(Floor);
 
+			Target_Left = Challenge_X+900-90;
+			Target_Right = Challenge_X+900+90;
+			Target_Up = Challenge_Y+90-175;
+			Target_Down = Challenge_Y+90-75;
+
+			Challenge_Name = "FREEZE DA CAT2";
+			Challenge_Instructions = "PRESS SPACE TO THROUU THE CATS TO THE ICE PLATFORM";
+
 			// Create the cat shooter
 			Teh_Shooter = new Cat_Shooter();
-
-			// Create grandma
-			Grandma = new TheGrandmother();
 			break;
+		}
+		case 2:
+		{
+			X_Camera = Y_Camera = 0;
+			Challenge_X = Res_Width/10;
+			Challenge_Y = Res_Height - Res_Height/3;
+
+			Objeto_Fisico *Floor;
+		    
+		   // Load and create the floor
+			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 50);
+			Floor->Puntero_Box->friction=0.5f;
+			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y);
+			Floor->Puntero_Box->rotation=-0.2;
+			Objetos_Fisicos.push_back(Floor);
+
+			// Load and create the floor
+			Floor = new Objeto_Fisico(FLT_MAX, 400, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
+			Objetos_Fisicos.push_back(Floor);
+
+			// Load and create the platforms
+			Floor = new Objeto_Fisico("media\\grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor->Puntero_Box->friction=0.3f;
+			Floor->Puntero_Box->position.Set(Challenge_X+760, Challenge_Y+90);
+			Objetos_Fisicos.push_back(Floor);
+			Floor = new Objeto_Fisico("media\\iceplatform.pcx",FLT_MAX, 180, 270);
+			Floor->Puntero_Box->friction=0.05f;
+			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150);
+			Objetos_Fisicos.push_back(Floor);
+
+			Target_Left = Challenge_X+900-90;
+			Target_Right = Challenge_X+900+90;
+			Target_Up = Challenge_Y+90-175;
+			Target_Down = Challenge_Y+90-75;
+
+			// Create the cat shooter
+			Teh_Shooter = new Cat_Shooter();
+			break;
+		}
 	}
 }
 void delete_Body(Body* b)
@@ -302,9 +358,6 @@ void Reiniciar(bool First_Time)
 		Teh_Shooter = NULL;
 	}
 
-	if(Grandma != NULL)
-		delete Grandma;
-
 	// Reiniciamos la partida
 	if(First_Time)
 		Iniciar_Partida(1);
@@ -312,8 +365,6 @@ void Reiniciar(bool First_Time)
 
 void Scroll_Controls()
 {
-/*	X_Camera = Grandma->Puntero_Box->position.x - Res_Width/2;
-	Y_Camera = Grandma->Puntero_Box->position.y - Res_Height/2;*/
 	if(key[KEY_LEFT])
 		X_Camera -=500;
 	if(key[KEY_RIGHT])
@@ -326,11 +377,21 @@ void Scroll_Controls()
 
 void Try_Finished(int x)
 {
+	if(Next != -1)
+		return;
 	switch (Current_Challenge)
 	{
 	case 1:
-		if(x<Challenge_X + 700 || x>Challenge_X + 900)
+		if(x<Target_Left || x>Target_Right)
+		{
+			Wait_Next = miliseconds;
 			Next = Current_Challenge;
+		}
+		else
+		{
+			Wait_Next = miliseconds;
+			Next = Current_Challenge+1;
+		}
 		break;
 	}
 }
@@ -338,6 +399,11 @@ void Try_Finished(int x)
 void Update_Challenge()
 {
 	if(Current_Challenge == 1)
+	{
+		if(Teh_Shooter != NULL)
+			Teh_Shooter->Update();
+	}
+	else if(Current_Challenge == 2)
 	{
 		if(Teh_Shooter != NULL)
 			Teh_Shooter->Update();
@@ -351,14 +417,16 @@ void Update()
 	world.Step(0.05);	// Actualizar las físicas
 
 	Update_Challenge();
-	Grandma->Update();
 
 	Scroll_Controls();
 
 	if(Next != -1)
 	{
-		Reiniciar(false);
-		Iniciar_Partida(Next);
+		if(miliseconds - Wait_Next > 500)
+		{
+			Reiniciar(false);
+			Iniciar_Partida(Next);
+		}
 	}
 }
 
@@ -423,12 +491,25 @@ void Render_Mouse()
 	circle(swap_screen, mouse_x, mouse_y, 5*Size_Multiplier, makecol(80, 80, 80));
 }
 
+void Render_Target(BITMAP * sc)
+{
+	line(sc, Target_Left-X_Camera, 0, Target_Left-X_Camera, Res_Height, makecol(200, 20, 50));
+	line(sc, Target_Right-X_Camera, 0, Target_Right-X_Camera, Res_Height, makecol(200, 20, 50));
+}
+
 void Render_Challenge()
 {
+	Render_Target(swap_screen);
 	if(Current_Challenge == 1)
 	{
 		if(Teh_Shooter != NULL)
 			Teh_Shooter->Render(swap_screen);
+	}
+	else if(Current_Challenge == 2)
+	{
+		if(Teh_Shooter != NULL)
+			Teh_Shooter->Render(swap_screen);
+		Render_Mouse();
 	}
 }
 
@@ -438,10 +519,6 @@ void Render()
 	clear_to_color(swap_screen, makecol(245,245,255));
 
 	// DIBUJAR TODO
-
-	line(swap_screen, Challenge_X, Challenge_Y-Res_Height/2, Challenge_X, Challenge_Y+Res_Height/2, makecol(255, 0, 0));
-	line(swap_screen, Challenge_X-Res_Width/2, Challenge_Y, Challenge_X+Res_Width/2, Challenge_Y, makecol(255, 0, 0));
-
 	// Dibujar objetos físicos
     for(int i = 0; i < (int)Objetos_Fisicos.size(); i ++) {
 		Objetos_Fisicos[i]->Dibuja(swap_screen);
@@ -449,6 +526,9 @@ void Render()
 
     if (Debug)
 	{
+		line(swap_screen, Challenge_X, Challenge_Y-Res_Height/2, Challenge_X, Challenge_Y+Res_Height/2, makecol(255, 0, 0));
+		line(swap_screen, Challenge_X-Res_Width/2, Challenge_Y, Challenge_X+Res_Width/2, Challenge_Y, makecol(255, 0, 0));
+
 		// Dibujar cajas de colisiones
 		for(int i = 0; i < (int)bodies.size(); i ++) {
 			DrawBody(swap_screen, bodies[i], 0, 0);
@@ -459,12 +539,78 @@ void Render()
         }
 	}
 
-	Grandma->Render(swap_screen);
 	Render_Challenge();
 
-	Write_Title();
+	if(Next == Current_Challenge)
+	{
+		int Cross_x = Res_Width/2;
+		int Cross_y = Res_Height/2;
+		int Cross_Size = 400*Size_Multiplier;
+		int Cross_Thickness = 50;
+		int points[8] = {
+			Cross_x - Cross_Size/2 + Cross_Thickness,
+			Cross_y + Cross_Size/2,
+			Cross_x + Cross_Size/2,
+			Cross_y - Cross_Size/2 + Cross_Thickness,
+			Cross_x + Cross_Size/2 - Cross_Thickness,
+			Cross_y - Cross_Size/2,
+			Cross_x - Cross_Size/2,
+			Cross_y + Cross_Size/2 - Cross_Thickness};
 
-	Render_Mouse();
+		polygon(swap_screen, 4, points, makecol(255, 0, 0));
+
+		int points2[8] = {
+			Cross_x + Cross_Size/2 - Cross_Thickness,
+			Cross_y + Cross_Size/2,
+			Cross_x + Cross_Size/2,
+			Cross_y + Cross_Size/2 - Cross_Thickness,
+			Cross_x - Cross_Size/2 + Cross_Thickness,
+			Cross_y - Cross_Size/2,
+			Cross_x - Cross_Size/2,
+			Cross_y - Cross_Size/2 + Cross_Thickness};
+
+		polygon(swap_screen, 4, points2, makecol(255, 0, 0));
+	}
+	if(Next > Current_Challenge)
+	{
+		int Cross_x = Res_Width/2;
+		int Cross_y = Res_Height/2;
+		int Cross_Size = 250*Size_Multiplier;
+		int Cross_Thickness = 50;
+
+		Cross_x -= Cross_Size/2;
+		int points[8] = {
+			Cross_x + Cross_Size/2 - Cross_Thickness,
+			Cross_y + Cross_Size/2,
+			Cross_x + Cross_Size/2,
+			Cross_y + Cross_Size/2 - Cross_Thickness,
+			Cross_x - Cross_Size/2 + Cross_Thickness,
+			Cross_y - Cross_Size/2,
+			Cross_x - Cross_Size/2,
+			Cross_y - Cross_Size/2 + Cross_Thickness};
+
+		polygon(swap_screen, 4, points, makecol(0, 255, 0));
+
+		Cross_x += Cross_Size/2+30*Size_Multiplier;
+		int points2[8] = {
+			Cross_x - Cross_Size/2 + Cross_Thickness,
+			Cross_y + Cross_Size/2,
+			Cross_x + Cross_Size,
+			Cross_y - Cross_Size/2 + Cross_Thickness,
+			Cross_x + Cross_Size - Cross_Thickness,
+			Cross_y - Cross_Size/2,
+			Cross_x - Cross_Size/2,
+			Cross_y + Cross_Size/2 - Cross_Thickness};
+
+		polygon(swap_screen, 4, points2, makecol(0, 255, 0));
+	}
+
+	Write_Title();
+	Writer->Write_String("CHALLENGE ", makecol(0, 0, 255), (5*25)*Size_Multiplier, 25*Size_Multiplier, 25*Size_Multiplier);
+	Writer->Write_Number(Current_Challenge, makecol(0, 0, 255), (9*25)*Size_Multiplier, 25*Size_Multiplier, 25*Size_Multiplier);
+	Writer->Write_String("OF 3", makecol(0, 0, 255), (12*25)*Size_Multiplier, 25*Size_Multiplier, 25*Size_Multiplier);
+	Writer->Write_String(Challenge_Name, makecol(0, 0, 255), (7*25)*Size_Multiplier, 50*Size_Multiplier, 20*Size_Multiplier);
+	Writer->Write_String(Challenge_Instructions, makecol(0, 0, 255), Res_Width/2, Res_Height - 25*Size_Multiplier, 15*Size_Multiplier);
 
     acquire_screen();	// Bloquear la pantalla antes de dibujar
     blit(swap_screen, screen, 0, 0, 0, 0, Res_Width, Res_Height); // Copiar todo desde swap_screen hasta la pantalla (screen)

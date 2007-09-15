@@ -241,7 +241,7 @@ void Easy_Writer::Draw_7Segments_Char(char Char, int x, int y, int Size, int Thi
             Active_Segments[3] = true;
             Active_Segments[5] = true;
             Active_Segments[6] = true;
-        break;   
+        break;
 		default:
 			
 		break;
