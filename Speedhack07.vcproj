@@ -267,6 +267,10 @@
 				>
 			</File>
 			<File
+				RelativePath=".\src\Missis_Plow.cpp"
+				>
+			</File>
+			<File
 				RelativePath=".\src\Objeto_Fisico.cpp"
 				>
 			</File>
@@ -306,6 +310,10 @@
 			</File>
 			<File
 				RelativePath=".\include\MathUtils.h"
+				>
+			</File>
+			<File
+				RelativePath=".\include\Missis_Plow.h"
 				>
 			</File>
 			<File

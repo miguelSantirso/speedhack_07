@@ -1,6 +1,6 @@
-#define FULLSCREEN
+//#define FULLSCREEN
 
-#define TITLE_LENGTH int(5000)
+#define TITLE_LENGTH int(2000)
 #define TITLETRANSITION_LENGTH int(900)
 
 #include <allegro.h>
@@ -13,6 +13,7 @@
 #include "Objeto_Fisico.h"
 #include "TheGrandmother.h"
 #include "Cat_Shooter.h"
+#include "Missis_Plow.h"
 
 using namespace std;
 
@@ -50,6 +51,7 @@ int Y_Camera;
 
 // Especial Objects
 Cat_Shooter * Teh_Shooter;
+Missis_Plow * Teh_MissisPlow;
 
 // Resolution
 int Res_Width;
@@ -223,17 +225,17 @@ void Start_Challenge(int ID_Challenge)
 
 			Objeto_Fisico *Floor;
 		    
+
+			// Load and create the floor
+			Floor = new Objeto_Fisico("media\\snowplatform.pcx",FLT_MAX, 400, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
+			Objetos_Fisicos.push_back(Floor);
 		   // Load and create the floor
 			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 50);
 			Floor->Puntero_Box->friction=0.5f;
 			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y);
 			Floor->Puntero_Box->rotation=-0.2;
-			Objetos_Fisicos.push_back(Floor);
-
-			// Load and create the floor
-			Floor = new Objeto_Fisico(FLT_MAX, 400, 53);
-			Floor->Puntero_Box->friction=1.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
 			Objetos_Fisicos.push_back(Floor);
 
 			// Load and create the platforms
@@ -251,7 +253,7 @@ void Start_Challenge(int ID_Challenge)
 			Target_Up = Challenge_Y+90-175;
 			Target_Down = Challenge_Y+90-75;
 
-			Challenge_Name = "FREEZE DA CAT2";
+			Challenge_Name = "FREE2E DA CAT2";
 			Challenge_Instructions = "PRESS SPACE TO THROUU THE CATS TO THE ICE PLATFORM";
 
 			// Create the cat shooter
@@ -261,41 +263,36 @@ void Start_Challenge(int ID_Challenge)
 		case 2:
 		{
 			X_Camera = Y_Camera = 0;
-			Challenge_X = Res_Width/10;
+			Challenge_X = Res_Width/2;
 			Challenge_Y = Res_Height - Res_Height/3;
 
 			Objeto_Fisico *Floor;
-		    
-		   // Load and create the floor
-			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 50);
-			Floor->Puntero_Box->friction=0.5f;
-			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y);
-			Floor->Puntero_Box->rotation=-0.2;
-			Objetos_Fisicos.push_back(Floor);
-
+		   
 			// Load and create the floor
-			Floor = new Objeto_Fisico(FLT_MAX, 400, 53);
+			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 400, 53);
 			Floor->Puntero_Box->friction=1.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
+			Floor->Puntero_Box->position.Set(Challenge_X, Challenge_Y+26);
 			Objetos_Fisicos.push_back(Floor);
-
 			// Load and create the platforms
 			Floor = new Objeto_Fisico("media\\grassplatform.pcx",FLT_MAX, 100, 150);
-			Floor->Puntero_Box->friction=0.3f;
-			Floor->Puntero_Box->position.Set(Challenge_X+760, Challenge_Y+90);
+			Floor->Puntero_Box->friction=3.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y+75);
 			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media\\iceplatform.pcx",FLT_MAX, 180, 270);
-			Floor->Puntero_Box->friction=0.05f;
-			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150);
+			// Load and create the platforms
+			Floor = new Objeto_Fisico("media\\grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor->Puntero_Box->friction=3.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X-250, Challenge_Y+75);
 			Objetos_Fisicos.push_back(Floor);
 
-			Target_Left = Challenge_X+900-90;
-			Target_Right = Challenge_X+900+90;
+			Teh_MissisPlow = new Missis_Plow();
+
+			Target_Left = Challenge_X+250 - 50;
+			Target_Right = Challenge_X+350 - 50;
 			Target_Up = Challenge_Y+90-175;
 			Target_Down = Challenge_Y+90-75;
 
-			// Create the cat shooter
-			Teh_Shooter = new Cat_Shooter();
+			Challenge_Name = "MISSIS PLOU";
+			Challenge_Instructions = "PRESS O AND P QUICKLY TO PUSH THE OTHER SNOU PLOUGH";
 			break;
 		}
 	}
@@ -357,6 +354,11 @@ void Reiniciar(bool First_Time)
 		delete Teh_Shooter;
 		Teh_Shooter = NULL;
 	}
+	if(Teh_MissisPlow != NULL)
+	{
+		delete Teh_MissisPlow;
+		Teh_MissisPlow = NULL;
+	}
 
 	// Reiniciamos la partida
 	if(First_Time)
@@ -405,8 +407,8 @@ void Update_Challenge()
 	}
 	else if(Current_Challenge == 2)
 	{
-		if(Teh_Shooter != NULL)
-			Teh_Shooter->Update();
+		if(Teh_MissisPlow != NULL)
+			Teh_MissisPlow->Update();
 	}
 }
 
@@ -507,9 +509,8 @@ void Render_Challenge()
 	}
 	else if(Current_Challenge == 2)
 	{
-		if(Teh_Shooter != NULL)
-			Teh_Shooter->Render(swap_screen);
-		Render_Mouse();
+		if(Teh_MissisPlow != NULL)
+			Teh_MissisPlow->Render(swap_screen);
 	}
 }
 
@@ -573,36 +574,12 @@ void Render()
 	}
 	if(Next > Current_Challenge)
 	{
-		int Cross_x = Res_Width/2;
-		int Cross_y = Res_Height/2;
-		int Cross_Size = 250*Size_Multiplier;
-		int Cross_Thickness = 50;
+		int Circle_x = Res_Width/2;
+		int Circle_y = Res_Height/2;
+		int Circle_Size = 300;
 
-		Cross_x -= Cross_Size/2;
-		int points[8] = {
-			Cross_x + Cross_Size/2 - Cross_Thickness,
-			Cross_y + Cross_Size/2,
-			Cross_x + Cross_Size/2,
-			Cross_y + Cross_Size/2 - Cross_Thickness,
-			Cross_x - Cross_Size/2 + Cross_Thickness,
-			Cross_y - Cross_Size/2,
-			Cross_x - Cross_Size/2,
-			Cross_y - Cross_Size/2 + Cross_Thickness};
-
-		polygon(swap_screen, 4, points, makecol(0, 255, 0));
-
-		Cross_x += Cross_Size/2+30*Size_Multiplier;
-		int points2[8] = {
-			Cross_x - Cross_Size/2 + Cross_Thickness,
-			Cross_y + Cross_Size/2,
-			Cross_x + Cross_Size,
-			Cross_y - Cross_Size/2 + Cross_Thickness,
-			Cross_x + Cross_Size - Cross_Thickness,
-			Cross_y - Cross_Size/2,
-			Cross_x - Cross_Size/2,
-			Cross_y + Cross_Size/2 - Cross_Thickness};
-
-		polygon(swap_screen, 4, points2, makecol(0, 255, 0));
+		circlefill(swap_screen, Circle_x, Circle_y, Circle_Size, makecol(0, 255, 0));
+		circlefill(swap_screen, Circle_x, Circle_y, Circle_Size*0.8, makecol(255, 255, 255));
 	}
 
 	Write_Title();
@@ -627,7 +604,11 @@ void Keyboard()
     int kp = readkey() >> 8;
 
 	if (kp == KEY_TAB) Debug = !Debug;
+	if (kp == KEY_C) miliseconds = 0;
 	if (kp == KEY_R) Next = Current_Challenge;
+	
+	if (kp == KEY_1) Next = 1;
+	if (kp == KEY_2) Next = 2;
 }
 
 // Función main
