@@ -16,9 +16,10 @@ public:
 	Body * Puntero_Box; // Puntero a la caja de colisiones asociada.
 protected:
 	BITMAP * Graph;
+	BITMAP * Arm_Sprite;
 
 	bool Key_Pressed;
-
+	bool Sound_Active;
 	long t;
 	
 	int Width;

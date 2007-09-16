@@ -19,7 +19,7 @@ using namespace std;
 
 Easy_Writer * Writer;
 
-bool Debug = true;			// Indica si se está en modo debug (se dibujan los bodies y los joints)
+bool Debug = false;			// Indica si se está en modo debug (se dibujan los bodies y los joints)
 
 World world(Vec2(0.0f, 20.0f), 10);		// Inicializa el sistema de físicas
 
@@ -54,6 +54,11 @@ Cat_Shooter * Teh_Shooter = NULL;
 Missis_Plow * Teh_MissisPlow = NULL;
 TheGrandmother * Teh_Grandma = NULL;
 vector<Objeto_Fisico *> Small_Objects;
+
+// Sounds
+SAMPLE * Success_Sound=NULL;
+SAMPLE * Error_Sound=NULL;
+SAMPLE * Magic_Sound=NULL;
 
 // Resolution
 int Res_Width;
@@ -368,6 +373,9 @@ void Iniciar_Partida(int i)
 	Next = -1;
 	// INICIALIZAR TODO
 	Writer = new Easy_Writer(swap_screen);
+	Success_Sound = load_wav("media/success.wav");
+	Error_Sound = load_wav("media/wrong.wav");
+	Magic_Sound = load_wav("media/magic.wav");
 
 	Seconds_Remaining = 120;
 
@@ -420,6 +428,13 @@ void Reiniciar(bool First_Time)
 		Teh_Grandma = NULL;
 	}
 
+	destroy_sample(Success_Sound);
+	Success_Sound = NULL;
+	destroy_sample(Error_Sound);
+	Error_Sound = NULL;
+	destroy_sample(Magic_Sound);
+	Magic_Sound = NULL;
+
 	// Reiniciamos la partida
 	if(First_Time)
 		Iniciar_Partida(1);
@@ -445,6 +460,7 @@ void Try_Finished(int x)
 	{
 		Wait_Next = miliseconds;
 		Next = Current_Challenge;
+		play_sample(Error_Sound, 255, 126, 1000, 0);
 	}
 
 	switch (Current_Challenge)
@@ -454,11 +470,13 @@ void Try_Finished(int x)
 		{
 			Wait_Next = miliseconds;
 			Next = Current_Challenge;
+			play_sample(Error_Sound, 255, 126, 1000, 0);
 		}
 		else
 		{
 			Wait_Next = miliseconds;
 			Next = Current_Challenge+1;
+			play_sample(Success_Sound, 255, 126, 1000, 0);
 		}
 		break;
 	case 2:
@@ -466,11 +484,13 @@ void Try_Finished(int x)
 		{
 			Wait_Next = miliseconds;
 			Next = Current_Challenge;
+			play_sample(Error_Sound, 255, 126, 1000, 0);
 		}
 		if(x>Target_Left && x<Target_Right)
 		{
 			Wait_Next = miliseconds;
 			Next = Current_Challenge+1;
+			play_sample(Success_Sound, 255, 126, 1000, 0);
 		}
 		break;
 	case 3:
@@ -478,6 +498,7 @@ void Try_Finished(int x)
 		{
 			Wait_Next = miliseconds;
 			Next = Current_Challenge+1;
+			play_sample(Success_Sound, 255, 126, 1000, 0);
 		}
 		break;
 	}

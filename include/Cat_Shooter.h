@@ -14,6 +14,10 @@ public:
 
 protected:
 	Objeto_Fisico * Cat;
+
+	BITMAP * Grandma_Sprite;
+	BITMAP * Arm_Sprite;
+
 	int Power;
 	bool Button_Pressed;
 
