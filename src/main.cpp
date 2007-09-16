@@ -11,9 +11,9 @@
 #include "Body.h"
 #include "Joint.h"
 #include "Objeto_Fisico.h"
-#include "TheGrandmother.h"
 #include "Cat_Shooter.h"
 #include "Missis_Plow.h"
+#include "TheGrandmother.h"
 
 using namespace std;
 
@@ -50,8 +50,10 @@ int X_Camera;
 int Y_Camera;
 
 // Especial Objects
-Cat_Shooter * Teh_Shooter;
-Missis_Plow * Teh_MissisPlow;
+Cat_Shooter * Teh_Shooter = NULL;
+Missis_Plow * Teh_MissisPlow = NULL;
+TheGrandmother * Teh_Grandma = NULL;
+vector<Objeto_Fisico *> Small_Objects;
 
 // Resolution
 int Res_Width;
@@ -227,7 +229,7 @@ void Start_Challenge(int ID_Challenge)
 		    
 
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media\\snowplatform.pcx",FLT_MAX, 400, 53);
+			Floor = new Objeto_Fisico("media\\snowplatform.pcx",FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
 			Objetos_Fisicos.push_back(Floor);
@@ -292,7 +294,59 @@ void Start_Challenge(int ID_Challenge)
 			Target_Down = Challenge_Y+90-75;
 
 			Challenge_Name = "MISSIS PLOU";
-			Challenge_Instructions = "PRESS O AND P QUICKLY TO PUSH THE OTHER SNOU PLOUGH";
+			Challenge_Instructions = "PRESS L AND P QUICKLY TO PUSH THE OTHER SNOU PLOUGH";
+			break;
+		}
+		case 3:
+		{
+			X_Camera = Y_Camera = 0;
+			Challenge_X = Res_Width/10;
+			Challenge_Y = Res_Height - Res_Height/3;
+
+			Objeto_Fisico *Floor;
+			Objeto_Fisico *Object;
+		   
+			// Load and create the floor
+			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X, Challenge_Y+26);
+			Objetos_Fisicos.push_back(Floor);
+			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+800, Challenge_Y+26);
+			Objetos_Fisicos.push_back(Floor);
+			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+1600, Challenge_Y+26);
+			Objetos_Fisicos.push_back(Floor);
+
+			Floor = new Objeto_Fisico(145.0f, 275, 20);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+10);
+			Objetos_Fisicos.push_back(Floor);
+			Floor = new Objeto_Fisico(FLT_MAX, 40, 200);
+			Floor->Puntero_Box->friction=5.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+120);
+			Objetos_Fisicos.push_back(Floor);
+
+			Object = new Objeto_Fisico(30.0f, 15, 15);
+			Object->Puntero_Box->friction=1.0f;
+			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
+			Small_Objects.push_back(Object);
+			Object = new Objeto_Fisico(21.0f, 10, 10);
+			Object->Puntero_Box->friction=1.0f;
+			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
+			Small_Objects.push_back(Object);
+
+			Teh_Grandma = new TheGrandmother();
+
+			Target_Left = Challenge_X+250 - 50;
+			Target_Right = Challenge_X+350 - 50;
+			Target_Up = Challenge_Y+90-175;
+			Target_Down = Challenge_Y+90-75;
+
+			Challenge_Name = "FIND DA FORCE";
+			Challenge_Instructions = "USE ARROWS TO MOVE AND MOUSE TO PICK OBJECTS WITH DA FORCE";
 			break;
 		}
 	}
@@ -344,6 +398,11 @@ void Reiniciar(bool First_Time)
     }
 	Objetos_Fisicos.clear();
 
+    for(int i = 0; i < (int)Small_Objects.size(); i ++) {
+        delete Small_Objects[i];
+    }
+	Small_Objects.clear();
+
 	delete Writer;
 	Writer = NULL;
 
@@ -359,6 +418,11 @@ void Reiniciar(bool First_Time)
 		delete Teh_MissisPlow;
 		Teh_MissisPlow = NULL;
 	}
+	if(Teh_Grandma != NULL)
+	{
+		delete Teh_Grandma;
+		Teh_Grandma = NULL;
+	}
 
 	// Reiniciamos la partida
 	if(First_Time)
@@ -367,14 +431,14 @@ void Reiniciar(bool First_Time)
 
 void Scroll_Controls()
 {
-	if(key[KEY_LEFT])
-		X_Camera -=500;
-	if(key[KEY_RIGHT])
-		X_Camera +=500;
-	if(key[KEY_DOWN])
-		Y_Camera +=500;
-	if(key[KEY_UP])
-		Y_Camera -=500;
+	if(key[KEY_A])
+		X_Camera -=5;
+	if(key[KEY_D])
+		X_Camera +=5;
+	if(key[KEY_S])
+		Y_Camera +=5;
+	if(key[KEY_W])
+		Y_Camera -=5;
 }
 
 void Try_Finished(int x)
@@ -407,6 +471,18 @@ void Try_Finished(int x)
 			Next = Current_Challenge+1;
 		}
 		break;
+	case 3:
+		if(x<Target_Left || x>Target_Right)
+		{
+			Wait_Next = miliseconds;
+			Next = Current_Challenge;
+		}
+		else
+		{
+			Wait_Next = miliseconds;
+			Next = Current_Challenge+1;
+		}
+		break;
 	}
 }
 
@@ -421,6 +497,11 @@ void Update_Challenge()
 	{
 		if(Teh_MissisPlow != NULL)
 			Teh_MissisPlow->Update();
+	}
+	else if(Current_Challenge == 3)
+	{
+		if(Teh_Grandma != NULL)
+			Teh_Grandma->Update();
 	}
 }
 
@@ -524,6 +605,15 @@ void Render_Challenge()
 		if(Teh_MissisPlow != NULL)
 			Teh_MissisPlow->Render(swap_screen);
 	}
+	else if(Current_Challenge == 3)
+	{
+		Render_Mouse();
+		if(Teh_Grandma != NULL)
+			Teh_Grandma->Render(swap_screen);
+
+		for(int i=0; i<(int)Small_Objects.size(); i++)
+			Small_Objects[i]->Dibuja(swap_screen);
+	}
 }
 
 // Realiza todas las tareas de dibujo.
@@ -539,8 +629,8 @@ void Render()
 
     if (Debug)
 	{
-		line(swap_screen, Challenge_X, Challenge_Y-Res_Height/2, Challenge_X, Challenge_Y+Res_Height/2, makecol(255, 0, 0));
-		line(swap_screen, Challenge_X-Res_Width/2, Challenge_Y, Challenge_X+Res_Width/2, Challenge_Y, makecol(255, 0, 0));
+		line(swap_screen, Challenge_X - X_Camera, 0, Challenge_X - X_Camera, Res_Height, makecol(255, 0, 0));
+		line(swap_screen, 0, Challenge_Y-Y_Camera, Res_Width, Challenge_Y-Y_Camera, makecol(255, 0, 0));
 
 		// Dibujar cajas de colisiones
 		for(int i = 0; i < (int)bodies.size(); i ++) {
@@ -621,6 +711,7 @@ void Keyboard()
 	
 	if (kp == KEY_1) Next = 1;
 	if (kp == KEY_2) Next = 2;
+	if (kp == KEY_3) Next = 3;
 }
 
 // Función main

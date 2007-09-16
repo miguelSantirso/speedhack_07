@@ -17,6 +17,8 @@ public:
 protected:
 	BITMAP * Graph;
 
+	bool Key_Pressed;
+
 	long t;
 	
 	int Width;

@@ -39,7 +39,7 @@ void Missis_Plow::Update()
 	}
 	else
 	{
-		if(key[KEY_O])
+		if(key[KEY_L])
 		{
 			Q_Last = !Q_Last;
 			DaPlough->Puntero_Box->AddForce(Vec2(600,0));
