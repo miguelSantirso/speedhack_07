@@ -20,13 +20,13 @@ Cat_Shooter::Cat_Shooter(void) : Cat(NULL), Button_Pressed(false), Power(0), Gra
 	PALETTE palette;
 
 	// Load the sprite
-	Grandma_Sprite = load_bitmap("media/grandma.pcx", palette);
+	Grandma_Sprite = load_bitmap("media/grandma.tga", palette);
 	if(!Grandma_Sprite)
-		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandma.pcx");
+		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandma.tga");
 
-	Arm_Sprite = load_bitmap("media/grandmaarm.pcx", palette);
+	Arm_Sprite = load_bitmap("media/grandmaarm.tga", palette);
 	if(!Arm_Sprite)
-		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandmaarm.pcx");
+		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandmaarm.tga");
 
 }
 
@@ -56,7 +56,7 @@ void Cat_Shooter::Update()
 			if(Cat == NULL)
 			{
 				play_sample(Cat_Sound, 200, 0, 1000, 0);
-				Cat = new Objeto_Fisico("media/cat.pcx", 1.0, 40, 27);
+				Cat = new Objeto_Fisico("media/cat.tga", 1.0, 40, 27);
 				Cat->Puntero_Box->friction = 1;
 				Cat->Puntero_Box->position.Set(Challenge_X+50, Challenge_Y);
 				Cat->Puntero_Box->AddForce(Vec2(Power*100, 500));

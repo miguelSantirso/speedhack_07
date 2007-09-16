@@ -60,6 +60,7 @@ SAMPLE * Success_Sound=NULL;
 SAMPLE * Error_Sound=NULL;
 SAMPLE * Magic_Sound=NULL;
 SAMPLE * Cat_Sound=NULL;
+SAMPLE * Tractor_Sound=NULL;
 
 // Resolution
 int Res_Width;
@@ -235,25 +236,25 @@ void Start_Challenge(int ID_Challenge)
 		    
 
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media/snowplatform.pcx",FLT_MAX, 500, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.tga",FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
 			Objetos_Fisicos.push_back(Floor);
 		   // Load and create the floor
-			Floor = new Objeto_Fisico("media/snowplatform.pcx", FLT_MAX, 500, 50);
+			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 50);
 			Floor->Puntero_Box->friction=0.5f;
 			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y);
 			Floor->Puntero_Box->rotation=-0.2;
 			Objetos_Fisicos.push_back(Floor);
 
 			// Load and create the platforms
-			Floor = new Objeto_Fisico("media/grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor = new Objeto_Fisico("media/grassplatform.tga",FLT_MAX, 100, 150);
 			Floor->Puntero_Box->friction=0.3f;
 			Floor->Puntero_Box->position.Set(Challenge_X+760, Challenge_Y+90);
 			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media/iceplatform.pcx",FLT_MAX, 180, 270);
+			Floor = new Objeto_Fisico("media/iceplatform.tga",FLT_MAX, 180, 200);
 			Floor->Puntero_Box->friction=0.05f;
-			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150);
+			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150-35);
 			Objetos_Fisicos.push_back(Floor);
 
 			Target_Left = Challenge_X+900-90;
@@ -277,17 +278,17 @@ void Start_Challenge(int ID_Challenge)
 			Objeto_Fisico *Floor;
 		   
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media/snowplatform.pcx", FLT_MAX, 400, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 400, 53);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X, Challenge_Y+26);
 			Objetos_Fisicos.push_back(Floor);
 			// Load and create the platforms
-			Floor = new Objeto_Fisico("media/grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor = new Objeto_Fisico("media/grassplatform.tga",FLT_MAX, 100, 150);
 			Floor->Puntero_Box->friction=3.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y+75);
 			Objetos_Fisicos.push_back(Floor);
 			// Load and create the platforms
-			Floor = new Objeto_Fisico("media/grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor = new Objeto_Fisico("media/grassplatform.tga",FLT_MAX, 100, 150);
 			Floor->Puntero_Box->friction=3.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X-250, Challenge_Y+75);
 			Objetos_Fisicos.push_back(Floor);
@@ -313,29 +314,29 @@ void Start_Challenge(int ID_Challenge)
 			Objeto_Fisico *Object;
 		   
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media/snowplatform.pcx", FLT_MAX, 500, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X, Challenge_Y+26);
 			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media/snowplatform.pcx", FLT_MAX, 500, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+800, Challenge_Y+30);
 			Objetos_Fisicos.push_back(Floor);
 
-			Floor = new Objeto_Fisico("media/rockplatform.pcx", 145.0f, 275, 20);
+			Floor = new Objeto_Fisico("media/rockplatform.tga", 145.0f, 275, 20);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+10);
 			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media/rockcolumn.pcx",FLT_MAX, 40, 200);
+			Floor = new Objeto_Fisico("media/rockcolumn.tga",FLT_MAX, 40, 200);
 			Floor->Puntero_Box->friction=5.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+120);
 			Objetos_Fisicos.push_back(Floor);
 
-			Object = new Objeto_Fisico("media/rockbig.pcx",32.0f, 27, 27);
+			Object = new Objeto_Fisico("media/rockbig.tga",32.0f, 27, 27);
 			Object->Puntero_Box->friction=1.0f;
 			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
 			Small_Objects.push_back(Object);
-			Object = new Objeto_Fisico("media/rocksmall.pcx",22.0f, 20, 20);
+			Object = new Objeto_Fisico("media/rocksmall.tga",22.0f, 20, 20);
 			Object->Puntero_Box->friction=1.0f;
 			Object->Puntero_Box->position.Set(Challenge_X+160, Challenge_Y+12);
 			Small_Objects.push_back(Object);
@@ -378,6 +379,7 @@ void Iniciar_Partida(int i)
 	Error_Sound = load_wav("media/wrong.wav");
 	Magic_Sound = load_wav("media/magic.wav");
 	Cat_Sound = load_wav("media/cat.wav");
+	Tractor_Sound = load_wav("media/tractor.wav");
 
 	Seconds_Remaining = 120;
 
@@ -438,6 +440,8 @@ void Reiniciar(bool First_Time)
 	Magic_Sound = NULL;
 	destroy_sample(Cat_Sound);
 	Cat_Sound = NULL;
+	destroy_sample(Tractor_Sound);
+	Tractor_Sound = NULL;
 
 	// Reiniciamos la partida
 	if(First_Time)

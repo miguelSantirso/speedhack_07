@@ -32,13 +32,13 @@ TheGrandmother::TheGrandmother(void) : t(0), Key_Pressed(false), Graph(NULL), Ar
 	PALETTE palette;
 
 	// Load the sprite
-	Graph = load_bitmap("media/grandma.pcx", palette);
+	Graph = load_bitmap("media/grandma.tga", palette);
 	if(!Graph)
-		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandma.pcx");
+		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandma.tga");
 
-	Arm_Sprite = load_bitmap("media/grandmaarm.pcx", palette);
+	Arm_Sprite = load_bitmap("media/grandmaarm.tga", palette);
 	if(!Arm_Sprite)
-		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandmaarm.pcx");
+		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandmaarm.tga");
 
 	Width=Graph->w;
 	Height=Graph->h;
