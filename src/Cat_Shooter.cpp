@@ -13,6 +13,7 @@ extern int Challenge_Y;
 extern void delete_Body(Body *);
 extern void Try_Finished(int);
 extern void Aborta_Con_Error(std::string);
+extern SAMPLE * Cat_Sound;
 
 Cat_Shooter::Cat_Shooter(void) : Cat(NULL), Button_Pressed(false), Power(0), Grandma_Sprite(NULL), Arm_Sprite(NULL)
 {
@@ -54,6 +55,7 @@ void Cat_Shooter::Update()
 		{
 			if(Cat == NULL)
 			{
+				play_sample(Cat_Sound, 200, 0, 1000, 0);
 				Cat = new Objeto_Fisico("media/cat.pcx", 1.0, 40, 27);
 				Cat->Puntero_Box->friction = 1;
 				Cat->Puntero_Box->position.Set(Challenge_X+50, Challenge_Y);

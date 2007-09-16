@@ -59,6 +59,7 @@ vector<Objeto_Fisico *> Small_Objects;
 SAMPLE * Success_Sound=NULL;
 SAMPLE * Error_Sound=NULL;
 SAMPLE * Magic_Sound=NULL;
+SAMPLE * Cat_Sound=NULL;
 
 // Resolution
 int Res_Width;
@@ -376,6 +377,7 @@ void Iniciar_Partida(int i)
 	Success_Sound = load_wav("media/success.wav");
 	Error_Sound = load_wav("media/wrong.wav");
 	Magic_Sound = load_wav("media/magic.wav");
+	Cat_Sound = load_wav("media/cat.wav");
 
 	Seconds_Remaining = 120;
 
@@ -434,6 +436,8 @@ void Reiniciar(bool First_Time)
 	Error_Sound = NULL;
 	destroy_sample(Magic_Sound);
 	Magic_Sound = NULL;
+	destroy_sample(Cat_Sound);
+	Cat_Sound = NULL;
 
 	// Reiniciamos la partida
 	if(First_Time)
