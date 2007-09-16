@@ -1,4 +1,4 @@
-#define FULLSCREEN
+//#define FULLSCREEN
 
 #define TITLE_LENGTH int(2000)
 #define TITLETRANSITION_LENGTH int(900)
@@ -325,13 +325,13 @@ void Start_Challenge(int ID_Challenge)
 			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+120);
 			Objetos_Fisicos.push_back(Floor);
 
-			Object = new Objeto_Fisico(32.0f, 15, 15);
+			Object = new Objeto_Fisico("media/rockbig.pcx",32.0f, 27, 27);
 			Object->Puntero_Box->friction=1.0f;
 			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
 			Small_Objects.push_back(Object);
-			Object = new Objeto_Fisico(22.0f, 10, 10);
+			Object = new Objeto_Fisico("media/rocksmall.pcx",22.0f, 20, 20);
 			Object->Puntero_Box->friction=1.0f;
-			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
+			Object->Puntero_Box->position.Set(Challenge_X+160, Challenge_Y+12);
 			Small_Objects.push_back(Object);
 
 			Teh_Grandma = new TheGrandmother();
