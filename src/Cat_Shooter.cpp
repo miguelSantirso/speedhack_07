@@ -35,7 +35,7 @@ void Cat_Shooter::Update()
 		{
 			if(Cat == NULL)
 			{
-				Cat = new Objeto_Fisico("media\\cat.pcx", 1.0, 40, 27);
+				Cat = new Objeto_Fisico("media/cat.pcx", 1.0, 40, 27);
 				Cat->Puntero_Box->friction = 1;
 				Cat->Puntero_Box->position.Set(Challenge_X+50, Challenge_Y);
 				Cat->Puntero_Box->AddForce(Vec2(Power*100, 500));

@@ -1,4 +1,4 @@
-//#define FULLSCREEN
+#define FULLSCREEN
 
 #define TITLE_LENGTH int(2000)
 #define TITLETRANSITION_LENGTH int(900)
@@ -229,23 +229,23 @@ void Start_Challenge(int ID_Challenge)
 		    
 
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media\\snowplatform.pcx",FLT_MAX, 500, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.pcx",FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
 			Objetos_Fisicos.push_back(Floor);
 		   // Load and create the floor
-			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 50);
+			Floor = new Objeto_Fisico("media/snowplatform.pcx", FLT_MAX, 500, 50);
 			Floor->Puntero_Box->friction=0.5f;
 			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y);
 			Floor->Puntero_Box->rotation=-0.2;
 			Objetos_Fisicos.push_back(Floor);
 
 			// Load and create the platforms
-			Floor = new Objeto_Fisico("media\\grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor = new Objeto_Fisico("media/grassplatform.pcx",FLT_MAX, 100, 150);
 			Floor->Puntero_Box->friction=0.3f;
 			Floor->Puntero_Box->position.Set(Challenge_X+760, Challenge_Y+90);
 			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media\\iceplatform.pcx",FLT_MAX, 180, 270);
+			Floor = new Objeto_Fisico("media/iceplatform.pcx",FLT_MAX, 180, 270);
 			Floor->Puntero_Box->friction=0.05f;
 			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150);
 			Objetos_Fisicos.push_back(Floor);
@@ -271,17 +271,17 @@ void Start_Challenge(int ID_Challenge)
 			Objeto_Fisico *Floor;
 		   
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 400, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.pcx", FLT_MAX, 400, 53);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X, Challenge_Y+26);
 			Objetos_Fisicos.push_back(Floor);
 			// Load and create the platforms
-			Floor = new Objeto_Fisico("media\\grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor = new Objeto_Fisico("media/grassplatform.pcx",FLT_MAX, 100, 150);
 			Floor->Puntero_Box->friction=3.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y+75);
 			Objetos_Fisicos.push_back(Floor);
 			// Load and create the platforms
-			Floor = new Objeto_Fisico("media\\grassplatform.pcx",FLT_MAX, 100, 150);
+			Floor = new Objeto_Fisico("media/grassplatform.pcx",FLT_MAX, 100, 150);
 			Floor->Puntero_Box->friction=3.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X-250, Challenge_Y+75);
 			Objetos_Fisicos.push_back(Floor);
@@ -307,41 +307,37 @@ void Start_Challenge(int ID_Challenge)
 			Objeto_Fisico *Object;
 		   
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.pcx", FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X, Challenge_Y+26);
 			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.pcx", FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X+800, Challenge_Y+26);
-			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media\\snowplatform.pcx", FLT_MAX, 500, 53);
-			Floor->Puntero_Box->friction=1.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X+1600, Challenge_Y+26);
+			Floor->Puntero_Box->position.Set(Challenge_X+800, Challenge_Y+30);
 			Objetos_Fisicos.push_back(Floor);
 
-			Floor = new Objeto_Fisico(145.0f, 275, 20);
+			Floor = new Objeto_Fisico("media/rockplatform.pcx", 145.0f, 275, 20);
 			Floor->Puntero_Box->friction=1.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+10);
 			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico(FLT_MAX, 40, 200);
+			Floor = new Objeto_Fisico("media/rockcolumn.pcx",FLT_MAX, 40, 200);
 			Floor->Puntero_Box->friction=5.0f;
 			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+120);
 			Objetos_Fisicos.push_back(Floor);
 
-			Object = new Objeto_Fisico(30.0f, 15, 15);
+			Object = new Objeto_Fisico(32.0f, 15, 15);
 			Object->Puntero_Box->friction=1.0f;
 			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
 			Small_Objects.push_back(Object);
-			Object = new Objeto_Fisico(21.0f, 10, 10);
+			Object = new Objeto_Fisico(22.0f, 10, 10);
 			Object->Puntero_Box->friction=1.0f;
 			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
 			Small_Objects.push_back(Object);
 
 			Teh_Grandma = new TheGrandmother();
 
-			Target_Left = Challenge_X+250 - 50;
-			Target_Right = Challenge_X+350 - 50;
+			Target_Left = Challenge_X+800 - 75;
+			Target_Right = Challenge_X+800 + 75;
 			Target_Up = Challenge_Y+90-175;
 			Target_Down = Challenge_Y+90-75;
 
@@ -445,6 +441,12 @@ void Try_Finished(int x)
 {
 	if(Next != -1)
 		return;
+	if(x < 0)
+	{
+		Wait_Next = miliseconds;
+		Next = Current_Challenge;
+	}
+
 	switch (Current_Challenge)
 	{
 	case 1:
@@ -472,12 +474,7 @@ void Try_Finished(int x)
 		}
 		break;
 	case 3:
-		if(x<Target_Left || x>Target_Right)
-		{
-			Wait_Next = miliseconds;
-			Next = Current_Challenge;
-		}
-		else
+		if(x>Target_Left && x<Target_Right)
 		{
 			Wait_Next = miliseconds;
 			Next = Current_Challenge+1;

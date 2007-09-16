@@ -9,7 +9,7 @@ extern void Try_Finished(int x);
 
 Missis_Plow::Missis_Plow(void) : x(Challenge_X), y(Challenge_Y-18), DaPlough(NULL), Q_Last(false)
 {
-	DaPlough = new Objeto_Fisico("media\\snowploughs.pcx", 15.0f, 135, 40);
+	DaPlough = new Objeto_Fisico("media/snowploughs.pcx", 15.0f, 135, 40);
 	DaPlough->Puntero_Box->position.Set(x, y);
 }
 

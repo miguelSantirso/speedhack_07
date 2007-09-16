@@ -30,15 +30,15 @@ TheGrandmother::TheGrandmother(void) : t(0), Key_Pressed(false)
 	PALETTE palette;
 
 	// Load the sprite
-	Graph = load_bitmap("media\\grandma.pcx", palette);
+	Graph = load_bitmap("media/grandma.pcx", palette);
 	if(!Graph)
-		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media\\grandma.pcx");
+		Aborta_Con_Error("ERROR:\nError de ejecucion en la funcion Inicializa() de Objeto_Fisico.cpp.\n - Can't load  media/grandma.pcx");
 
 	Width=Graph->w;
 	Height=Graph->h;
 
 	Puntero_Box = new Body();
-	Puntero_Box->Set(Vec2(Width, Height), 100.0f); // Tamaño
+	Puntero_Box->Set(Vec2(Width, Height), 98.0f); // Tamaño
 	Puntero_Box->position.Set(Challenge_X, Challenge_Y-Height/2); // Posición
     Puntero_Box->friction = 0.5; // Fricción del objeto
 	world.Add(Puntero_Box); // La añadimos al "mundo"
@@ -73,7 +73,7 @@ void TheGrandmother::Update()
 	}
 	else
 	{
-		if(!Key_Pressed && Puntero_Box->velocity.x < 0.1)
+		if(!Key_Pressed && Puntero_Box->velocity.x < 0.1 && !mouse_b)
 		{
 			if(key[KEY_RIGHT])
 				Puntero_Box->force.x = 50000;
@@ -95,14 +95,19 @@ void TheGrandmother::Update()
 			Vec2 Force = Vec2(mouse_x+X_Camera, mouse_y+Y_Camera) - Small_Objects[i]->Puntero_Box->position;
 			Force.x = (Force.x > 0 ? 1 : -1);
 			Force.y = (Force.y > 0 ? 1 : -1);
-			Force*=500000;
+			Force*=520000;
 			Force*=Inverted_Distance*Inverted_Distance*Inverted_Distance;
 			Small_Objects[i]->Puntero_Box->AddForce(Force);
 		}
 	}
 
+	int Aux = Puntero_Box->position.x - Width/2;
+	if(Puntero_Box->velocity.x > 0.1)
+		Aux = 0;
 	if(Puntero_Box->position.y > Res_Height)
-		Try_Finished(0);
+		Aux = -1;
+
+	Try_Finished(Aux);
 
 //	Puntero_Box->force.y = (-150/Size_Multiplier)*((-Res_Height/3 + Puntero_Box->position.y)/6);
 }
