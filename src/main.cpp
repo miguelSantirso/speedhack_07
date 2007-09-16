@@ -632,8 +632,8 @@ void main(int argc, char** argv)
 	get_desktop_resolution(& Res_Width, & Res_Height);
 	set_gfx_mode(GFX_AUTODETECT, Res_Width, Res_Height, 0, 0);
 #else
-	Res_Width = 1024;
-	Res_Height = 768;
+	Res_Width = 800;
+	Res_Height = 600;
     set_gfx_mode(GFX_AUTODETECT_WINDOWED, Res_Width, Res_Height, 0, 0);
 #endif
 	Size_Multiplier = Res_Width/640 ;
