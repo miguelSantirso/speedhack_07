@@ -1,4 +1,4 @@
-//#define FULLSCREEN
+#define FULLSCREEN
 
 #define TITLE_LENGTH int(2000)
 #define TITLETRANSITION_LENGTH int(900)
@@ -43,6 +43,10 @@ int Target_Down;
 
 string Challenge_Name;
 string Challenge_Instructions;
+
+bool Times_Up;
+bool Finished;
+int Finished_Miliseconds;
 
 
 // Camera Coordinates
@@ -233,40 +237,45 @@ void Start_Challenge(int ID_Challenge)
 			Challenge_Y = Res_Height - Res_Height/3;
 
 			Objeto_Fisico *Floor;
-		    
-
+			Objeto_Fisico *Object;
+		   
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media/snowplatform.tga",FLT_MAX, 500, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
+			Floor->Puntero_Box->position.Set(Challenge_X, Challenge_Y+26);
 			Objetos_Fisicos.push_back(Floor);
-		   // Load and create the floor
-			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 50);
+			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+800, Challenge_Y+30);
+			Objetos_Fisicos.push_back(Floor);
+
+			Floor = new Objeto_Fisico("media/rockplatform.tga", 145.0f, 275, 20);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+10);
+			Objetos_Fisicos.push_back(Floor);
+			Floor = new Objeto_Fisico("media/rockcolumn.tga",FLT_MAX, 40, 200);
 			Floor->Puntero_Box->friction=0.5f;
-			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y);
-			Floor->Puntero_Box->rotation=-0.2;
+			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+120);
 			Objetos_Fisicos.push_back(Floor);
 
-			// Load and create the platforms
-			Floor = new Objeto_Fisico("media/grassplatform.tga",FLT_MAX, 100, 150);
-			Floor->Puntero_Box->friction=0.3f;
-			Floor->Puntero_Box->position.Set(Challenge_X+760, Challenge_Y+90);
-			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media/iceplatform.tga",FLT_MAX, 180, 200);
-			Floor->Puntero_Box->friction=0.05f;
-			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150-35);
-			Objetos_Fisicos.push_back(Floor);
+			Object = new Objeto_Fisico("media/rockbig.tga",32.0f, 27, 27);
+			Object->Puntero_Box->friction=1.0f;
+			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
+			Small_Objects.push_back(Object);
+			Object = new Objeto_Fisico("media/rocksmall.tga",22.0f, 20, 20);
+			Object->Puntero_Box->friction=1.0f;
+			Object->Puntero_Box->position.Set(Challenge_X+160, Challenge_Y+12);
+			Small_Objects.push_back(Object);
 
-			Target_Left = Challenge_X+900-90;
-			Target_Right = Challenge_X+900+90;
+			Teh_Grandma = new TheGrandmother();
+
+			Target_Left = Challenge_X+800 - 75;
+			Target_Right = Challenge_X+800 + 75;
 			Target_Up = Challenge_Y+90-175;
 			Target_Down = Challenge_Y+90-75;
 
-			Challenge_Name = "FREE2E DA CAT2";
-			Challenge_Instructions = "PRESS SPACE TO THROUU THE CATS TO THE ICE PLATFORM";
-
-			// Create the cat shooter
-			Teh_Shooter = new Cat_Shooter();
+			Challenge_Name = "FIND DA FORCE";
+			Challenge_Instructions = "USE ARROUS TO MOVE AND MOUSE TO PICK OBJECTS UITH DA FORCE";
 			break;
 		}
 		case 2:
@@ -311,45 +320,40 @@ void Start_Challenge(int ID_Challenge)
 			Challenge_Y = Res_Height - Res_Height/3;
 
 			Objeto_Fisico *Floor;
-			Objeto_Fisico *Object;
-		   
+		    
+
 			// Load and create the floor
-			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 53);
+			Floor = new Objeto_Fisico("media/snowplatform.tga",FLT_MAX, 500, 53);
 			Floor->Puntero_Box->friction=1.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X, Challenge_Y+26);
+			Floor->Puntero_Box->position.Set(Challenge_X+100, Challenge_Y+30);
 			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 53);
-			Floor->Puntero_Box->friction=1.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X+800, Challenge_Y+30);
-			Objetos_Fisicos.push_back(Floor);
-
-			Floor = new Objeto_Fisico("media/rockplatform.tga", 145.0f, 275, 20);
-			Floor->Puntero_Box->friction=1.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+10);
-			Objetos_Fisicos.push_back(Floor);
-			Floor = new Objeto_Fisico("media/rockcolumn.tga",FLT_MAX, 40, 200);
-			Floor->Puntero_Box->friction=5.0f;
-			Floor->Puntero_Box->position.Set(Challenge_X+400, Challenge_Y+120);
+		   // Load and create the floor
+			Floor = new Objeto_Fisico("media/snowplatform.tga", FLT_MAX, 500, 50);
+			Floor->Puntero_Box->friction=0.5f;
+			Floor->Puntero_Box->position.Set(Challenge_X+250, Challenge_Y);
+			Floor->Puntero_Box->rotation=-0.2;
 			Objetos_Fisicos.push_back(Floor);
 
-			Object = new Objeto_Fisico("media/rockbig.tga",32.0f, 27, 27);
-			Object->Puntero_Box->friction=1.0f;
-			Object->Puntero_Box->position.Set(Challenge_X+200, Challenge_Y+12);
-			Small_Objects.push_back(Object);
-			Object = new Objeto_Fisico("media/rocksmall.tga",22.0f, 20, 20);
-			Object->Puntero_Box->friction=1.0f;
-			Object->Puntero_Box->position.Set(Challenge_X+160, Challenge_Y+12);
-			Small_Objects.push_back(Object);
+			// Load and create the platforms
+			Floor = new Objeto_Fisico("media/grassplatform.tga",FLT_MAX, 100, 150);
+			Floor->Puntero_Box->friction=0.3f;
+			Floor->Puntero_Box->position.Set(Challenge_X+760, Challenge_Y+90);
+			Objetos_Fisicos.push_back(Floor);
+			Floor = new Objeto_Fisico("media/iceplatform.tga",FLT_MAX, 180, 200);
+			Floor->Puntero_Box->friction=0.05f;
+			Floor->Puntero_Box->position.Set(Challenge_X+900, Challenge_Y+150-35);
+			Objetos_Fisicos.push_back(Floor);
 
-			Teh_Grandma = new TheGrandmother();
-
-			Target_Left = Challenge_X+800 - 75;
-			Target_Right = Challenge_X+800 + 75;
+			Target_Left = Challenge_X+900-90;
+			Target_Right = Challenge_X+900+90;
 			Target_Up = Challenge_Y+90-175;
 			Target_Down = Challenge_Y+90-75;
 
-			Challenge_Name = "FIND DA FORCE";
-			Challenge_Instructions = "USE ARROWS TO MOVE AND MOUSE TO PICK OBJECTS WITH DA FORCE";
+			Challenge_Name = "FREE2E DA CAT2";
+			Challenge_Instructions = "PRESS SPACE TO THROU THE CATS TO THE ICE PLATFORM";
+
+			// Create the cat shooter
+			Teh_Shooter = new Cat_Shooter();
 			break;
 		}
 	}
@@ -389,6 +393,8 @@ void Iniciar_Partida(int i)
 
 void Reiniciar(bool First_Time)
 {
+	Times_Up=false;
+	Finished = false;
 	// ELIMINAR TODO
 
     for(int i = 0; i < (int)joints.size(); i ++) {
@@ -474,13 +480,7 @@ void Try_Finished(int x)
 	switch (Current_Challenge)
 	{
 	case 1:
-		if(x<Target_Left || x>Target_Right)
-		{
-			Wait_Next = miliseconds;
-			Next = Current_Challenge;
-			play_sample(Error_Sound, 255, 126, 1000, 0);
-		}
-		else
+		if(x>Target_Left && x<Target_Right)
 		{
 			Wait_Next = miliseconds;
 			Next = Current_Challenge+1;
@@ -502,19 +502,26 @@ void Try_Finished(int x)
 		}
 		break;
 	case 3:
-		if(x>Target_Left && x<Target_Right)
+		if(x<Target_Left || x>Target_Right)
+		{
+			Wait_Next = miliseconds;
+			Next = Current_Challenge;
+			play_sample(Error_Sound, 255, 126, 1000, 0);
+		}
+		else
 		{
 			Wait_Next = miliseconds;
 			Next = Current_Challenge+1;
 			play_sample(Success_Sound, 255, 126, 1000, 0);
 		}
 		break;
+
 	}
 }
 
 void Update_Challenge()
 {
-	if(Current_Challenge == 1)
+	if(Current_Challenge == 3)
 	{
 		if(Teh_Shooter != NULL)
 			Teh_Shooter->Update();
@@ -524,7 +531,7 @@ void Update_Challenge()
 		if(Teh_MissisPlow != NULL)
 			Teh_MissisPlow->Update();
 	}
-	else if(Current_Challenge == 3)
+	else if(Current_Challenge == 1)
 	{
 		if(Teh_Grandma != NULL)
 			Teh_Grandma->Update();
@@ -534,6 +541,9 @@ void Update_Challenge()
 // Función que se ocupa de actualizar la lógica y la física del juego
 void Update()
 {
+	if(Times_Up || Finished)
+		return;
+
 	// ACTUALIZAR TODA LA LÓGICA
 	world.Step(0.05);	// Actualizar las físicas
 
@@ -541,12 +551,28 @@ void Update()
 
 	Scroll_Controls();
 
+	if(Next == 4)
+	{
+		Finished = true;
+		Finished_Miliseconds = miliseconds;
+		play_sample(Success_Sound, 255, 126, 1000, 0);
+		return;
+	}
+
 	if(Next != -1)
 	{
 		if(miliseconds - Wait_Next > 500)
 		{
 			Reiniciar(false);
 			Iniciar_Partida(Next);
+		}
+	}
+	else
+	{
+		if(miliseconds - Seconds_Remaining*1000 > 0)
+		{
+			Times_Up = true;
+			play_sample(Error_Sound, 255, 126, 1000, 0);
 		}
 	}
 }
@@ -621,7 +647,7 @@ void Render_Target(BITMAP * sc)
 void Render_Challenge()
 {
 	Render_Target(swap_screen);
-	if(Current_Challenge == 1)
+	if(Current_Challenge == 3)
 	{
 		if(Teh_Shooter != NULL)
 			Teh_Shooter->Render(swap_screen);
@@ -631,7 +657,7 @@ void Render_Challenge()
 		if(Teh_MissisPlow != NULL)
 			Teh_MissisPlow->Render(swap_screen);
 	}
-	else if(Current_Challenge == 3)
+	else if(Current_Challenge == 1)
 	{
 		Render_Mouse();
 		if(Teh_Grandma != NULL)
@@ -641,6 +667,48 @@ void Render_Challenge()
 			Small_Objects[i]->Dibuja(swap_screen);
 	}
 }
+
+void draw_cross()
+{
+	int Cross_x = Res_Width/2;
+	int Cross_y = Res_Height/2;
+	int Cross_Size = 400*Size_Multiplier;
+	int Cross_Thickness = 50*Size_Multiplier;
+	int points[8] = {
+		Cross_x - Cross_Size/2 + Cross_Thickness,
+		Cross_y + Cross_Size/2,
+		Cross_x + Cross_Size/2,
+		Cross_y - Cross_Size/2 + Cross_Thickness,
+		Cross_x + Cross_Size/2 - Cross_Thickness,
+		Cross_y - Cross_Size/2,
+		Cross_x - Cross_Size/2,
+		Cross_y + Cross_Size/2 - Cross_Thickness};
+
+	polygon(swap_screen, 4, points, makecol(255, 0, 0));
+
+	int points2[8] = {
+		Cross_x + Cross_Size/2 - Cross_Thickness,
+		Cross_y + Cross_Size/2,
+		Cross_x + Cross_Size/2,
+		Cross_y + Cross_Size/2 - Cross_Thickness,
+		Cross_x - Cross_Size/2 + Cross_Thickness,
+		Cross_y - Cross_Size/2,
+		Cross_x - Cross_Size/2,
+		Cross_y - Cross_Size/2 + Cross_Thickness};
+
+	polygon(swap_screen, 4, points2, makecol(255, 0, 0));
+}
+
+void draw_circle()
+{
+	int Circle_x = Res_Width/2;
+	int Circle_y = Res_Height/2;
+	int Circle_Size = 250*Size_Multiplier;
+
+	circlefill(swap_screen, Circle_x, Circle_y, Circle_Size, makecol(0, 255, 0));
+	circlefill(swap_screen, Circle_x, Circle_y, Circle_Size*0.8, makecol(255, 255, 255));
+}
+
 
 // Realiza todas las tareas de dibujo.
 void Render()
@@ -672,42 +740,33 @@ void Render()
 
 	if(Next == Current_Challenge)
 	{
-		int Cross_x = Res_Width/2;
-		int Cross_y = Res_Height/2;
-		int Cross_Size = 400*Size_Multiplier;
-		int Cross_Thickness = 50;
-		int points[8] = {
-			Cross_x - Cross_Size/2 + Cross_Thickness,
-			Cross_y + Cross_Size/2,
-			Cross_x + Cross_Size/2,
-			Cross_y - Cross_Size/2 + Cross_Thickness,
-			Cross_x + Cross_Size/2 - Cross_Thickness,
-			Cross_y - Cross_Size/2,
-			Cross_x - Cross_Size/2,
-			Cross_y + Cross_Size/2 - Cross_Thickness};
-
-		polygon(swap_screen, 4, points, makecol(255, 0, 0));
-
-		int points2[8] = {
-			Cross_x + Cross_Size/2 - Cross_Thickness,
-			Cross_y + Cross_Size/2,
-			Cross_x + Cross_Size/2,
-			Cross_y + Cross_Size/2 - Cross_Thickness,
-			Cross_x - Cross_Size/2 + Cross_Thickness,
-			Cross_y - Cross_Size/2,
-			Cross_x - Cross_Size/2,
-			Cross_y - Cross_Size/2 + Cross_Thickness};
-
-		polygon(swap_screen, 4, points2, makecol(255, 0, 0));
+		draw_cross();
 	}
 	if(Next > Current_Challenge)
 	{
-		int Circle_x = Res_Width/2;
-		int Circle_y = Res_Height/2;
-		int Circle_Size = 300;
+		draw_circle();
+	}
+	if(Times_Up)
+	{
+		draw_cross();
 
-		circlefill(swap_screen, Circle_x, Circle_y, Circle_Size, makecol(0, 255, 0));
-		circlefill(swap_screen, Circle_x, Circle_y, Circle_Size*0.8, makecol(255, 255, 255));
+		int Font_Size = 120;
+		Writer->Write_String("TIME S", makecol(50, 50, 255), Res_Width/2, Res_Height/2-(Font_Size/2+15)*Size_Multiplier, Font_Size*Size_Multiplier);
+		Writer->Write_String("UP", makecol(50, 50, 255), Res_Width/2, Res_Height/2+(Font_Size/2+15)*Size_Multiplier, Font_Size*Size_Multiplier);
+		Challenge_Instructions = "PRESS R TO RESTART THE GAME OR ESC TO EHIT";
+	}
+	if(Finished)
+	{
+		draw_circle();
+
+		int Font_Size = 120;
+		int SmallFont_Size = 50;
+		Writer->Write_String("FINISHED", makecol(50, 50, 255), Res_Width/2, Res_Height/2-(Font_Size+15)*Size_Multiplier, Font_Size*Size_Multiplier);
+		Writer->Write_String("CONGRATULATIONS", makecol(50, 50, 255), Res_Width/2, Res_Height/2-(Font_Size/2 - SmallFont_Size/2)*Size_Multiplier, SmallFont_Size*Size_Multiplier);
+		Writer->Write_String("YOU HAD", makecol(50, 50, 255), Res_Width/2, Res_Height/2+30*Size_Multiplier, SmallFont_Size*Size_Multiplier);
+		Writer->Write_Number(Seconds_Remaining*1000 - Finished_Miliseconds, makecol(50, 50, 255), Res_Width/2, Res_Height/2+110*Size_Multiplier, (10+SmallFont_Size)*Size_Multiplier);
+		Writer->Write_String("MILISECONDS MORE", makecol(50, 50, 255), Res_Width/2, Res_Height/2+180*Size_Multiplier, SmallFont_Size*Size_Multiplier);
+		Challenge_Instructions = "PRESS R TO RESTART THE GAME OR ESC TO EHIT";
 	}
 
 	Write_Title();
@@ -733,15 +792,17 @@ void Keyboard()
 
 	if (kp == KEY_TAB) Debug = !Debug;
 	if (kp == KEY_C) miliseconds = 0;
-	if (kp == KEY_R) Next = Current_Challenge;
+	if (kp == KEY_R) {miliseconds = 0; Reiniciar();}
+	if (kp == KEY_T) Next = Current_Challenge;
 	
 	if (kp == KEY_1) Next = 1;
 	if (kp == KEY_2) Next = 2;
 	if (kp == KEY_3) Next = 3;
+	if (kp == KEY_4) Next = 4;
 }
 
 // Función main
-void main(int argc, char** argv)
+int main(int argc, char** argv)
 {
     allegro_init();
 	set_color_depth(16);
@@ -829,5 +890,6 @@ void main(int argc, char** argv)
 	}
 
 	allegro_exit();
+	return 0;
 }
 END_OF_MAIN()

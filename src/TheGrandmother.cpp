@@ -134,7 +134,7 @@ void TheGrandmother::Update()
 		for(int i=0; i<Small_Objects.size(); i++)
 		{
 			Small_Objects[i]->Puntero_Box->force.Set(0,0);
-			float Inverted_Distance = 1/abs(Small_Objects[i]->Puntero_Box->position.x - Puntero_Box->position.x);
+			float Inverted_Distance = 1/fabs(double(Small_Objects[i]->Puntero_Box->position.x - Puntero_Box->position.x));
 			Inverted_Distance += 0.1;
 			if(Inverted_Distance > 0.111)
 				Inverted_Distance = 0.111;

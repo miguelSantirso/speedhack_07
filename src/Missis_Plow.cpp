@@ -34,18 +34,18 @@ void Missis_Plow::Update()
 	DaPlough->Puntero_Box->AddForce(Vec2(-150,0));
 	if(Q_Last)
 	{
-		if(key[KEY_P])
+		if(key[KEY_P] && !key[KEY_L])
 		{
 			Q_Last = !Q_Last;
-			DaPlough->Puntero_Box->AddForce(Vec2(600,0));
+			DaPlough->Puntero_Box->AddForce(Vec2(1500,0));
 		}
 	}
 	else
 	{
-		if(key[KEY_L])
+		if(key[KEY_L] && !key[KEY_P])
 		{
 			Q_Last = !Q_Last;
-			DaPlough->Puntero_Box->AddForce(Vec2(600,0));
+			DaPlough->Puntero_Box->AddForce(Vec2(1500,0));
 		}
 	}
 	Try_Finished(DaPlough->Puntero_Box->position.x);
