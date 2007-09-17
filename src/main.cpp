@@ -14,6 +14,7 @@
 #include "Cat_Shooter.h"
 #include "Missis_Plow.h"
 #include "TheGrandmother.h"
+#include "The_Competition.h"
 
 using namespace std;
 
@@ -58,6 +59,7 @@ Cat_Shooter * Teh_Shooter = NULL;
 Missis_Plow * Teh_MissisPlow = NULL;
 TheGrandmother * Teh_Grandma = NULL;
 vector<Objeto_Fisico *> Small_Objects;
+The_Competition * Teh_Compo = NULL;
 
 // Sounds
 SAMPLE * Success_Sound=NULL;
@@ -316,6 +318,38 @@ void Start_Challenge(int ID_Challenge)
 		case 3:
 		{
 			X_Camera = Y_Camera = 0;
+			Challenge_X = Res_Width/2;
+			Challenge_Y = Res_Height/2;
+
+			Objeto_Fisico *Floor;
+		    
+
+			// Load and create the floor
+			Floor = new Objeto_Fisico("media/iceplatform.tga",FLT_MAX, 500, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X-280, Challenge_Y+130);
+			Objetos_Fisicos.push_back(Floor);
+			// Load and create the floor
+			Floor = new Objeto_Fisico("media/iceplatform.tga",FLT_MAX, 500, 53);
+			Floor->Puntero_Box->friction=1.0f;
+			Floor->Puntero_Box->position.Set(Challenge_X+280, Challenge_Y+130);
+			Objetos_Fisicos.push_back(Floor);
+
+			Target_Left = 0;
+			Target_Right = 0;
+			Target_Up = 0;
+			Target_Down = 0;
+
+			Challenge_Name = "ANSUER THIS";
+			Challenge_Instructions = "USE THE MOUSE TO CHOOSE THE RIGHT OPTION";
+
+			// Create the cat shooter
+			Teh_Compo = new The_Competition();
+			break;
+		}
+		case 4:
+		{
+			X_Camera = Y_Camera = 0;
 			Challenge_X = Res_Width/10;
 			Challenge_Y = Res_Height - Res_Height/3;
 
@@ -502,6 +536,14 @@ void Try_Finished(int x)
 		}
 		break;
 	case 3:
+		if(x == 1)
+		{
+			Wait_Next = miliseconds;
+			Next = Current_Challenge+1;
+			play_sample(Success_Sound, 255, 126, 1000, 0);
+		}
+		break;
+	case 4:
 		if(x<Target_Left || x>Target_Right)
 		{
 			Wait_Next = miliseconds;
@@ -521,10 +563,15 @@ void Try_Finished(int x)
 
 void Update_Challenge()
 {
-	if(Current_Challenge == 3)
+	if(Current_Challenge == 4)
 	{
 		if(Teh_Shooter != NULL)
 			Teh_Shooter->Update();
+	}
+	else if(Current_Challenge == 3)
+	{
+		if(Teh_Compo != NULL)
+			Teh_Compo->Update();
 	}
 	else if(Current_Challenge == 2)
 	{
@@ -551,7 +598,7 @@ void Update()
 
 	Scroll_Controls();
 
-	if(Next == 4)
+	if(Next == 5)
 	{
 		Finished = true;
 		Finished_Miliseconds = miliseconds;
@@ -647,10 +694,16 @@ void Render_Target(BITMAP * sc)
 void Render_Challenge()
 {
 	Render_Target(swap_screen);
-	if(Current_Challenge == 3)
+	if(Current_Challenge == 4)
 	{
 		if(Teh_Shooter != NULL)
 			Teh_Shooter->Render(swap_screen);
+	}
+	else if(Current_Challenge == 3)
+	{
+		Render_Mouse();
+		if(Teh_Compo != NULL)
+			Teh_Compo->Render(swap_screen);
 	}
 	else if(Current_Challenge == 2)
 	{
@@ -772,7 +825,7 @@ void Render()
 	Write_Title();
 	Writer->Write_String("CHALLENGE ", makecol(0, 0, 255), (5*25)*Size_Multiplier, 25*Size_Multiplier, 25*Size_Multiplier);
 	Writer->Write_Number(Current_Challenge, makecol(0, 0, 255), (9*25)*Size_Multiplier, 25*Size_Multiplier, 25*Size_Multiplier);
-	Writer->Write_String("OF 3", makecol(0, 0, 255), (12*25)*Size_Multiplier, 25*Size_Multiplier, 25*Size_Multiplier);
+	Writer->Write_String("OF 4", makecol(0, 0, 255), (12*25)*Size_Multiplier, 25*Size_Multiplier, 25*Size_Multiplier);
 	Writer->Write_String(Challenge_Name, makecol(0, 0, 255), (7*25)*Size_Multiplier, 50*Size_Multiplier, 20*Size_Multiplier);
 	Writer->Write_String(Challenge_Instructions, makecol(0, 0, 255), Res_Width/2, Res_Height - 25*Size_Multiplier, 15*Size_Multiplier);
 
@@ -799,6 +852,7 @@ void Keyboard()
 	if (kp == KEY_2) Next = 2;
 	if (kp == KEY_3) Next = 3;
 	if (kp == KEY_4) Next = 4;
+	if (kp == KEY_5) Next = 5;
 }
 
 // Función main
@@ -810,8 +864,8 @@ int main(int argc, char** argv)
 	get_desktop_resolution(& Res_Width, & Res_Height);
 	set_gfx_mode(GFX_AUTODETECT, Res_Width, Res_Height, 0, 0);
 #else
-	Res_Width = 800;
-	Res_Height = 600;
+	Res_Width = 1024;
+	Res_Height = 768;
     set_gfx_mode(GFX_AUTODETECT_WINDOWED, Res_Width, Res_Height, 0, 0);
 #endif
 	Size_Multiplier = Res_Width/640 ;
